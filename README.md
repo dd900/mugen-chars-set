@@ -1,6 +1,6 @@
-V1.7.1 (2021-11-8)
-    Translated (loosely)
-    small fixes
+* V1.7.1 (2021-11-8)
+  * Translated (loosely)
+  * small fixes
 
 
 # M.u.g.e.n
