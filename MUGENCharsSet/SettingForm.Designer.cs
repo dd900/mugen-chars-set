@@ -61,7 +61,7 @@
             this.grpSetting.Size = new System.Drawing.Size(391, 63);
             this.grpSetting.TabIndex = 1;
             this.grpSetting.TabStop = false;
-            this.grpSetting.Text = "程序设置";
+            this.grpSetting.Text = "Program setting";
             // 
             // chkShowCharacterScreenMark
             // 
@@ -70,8 +70,8 @@
             this.chkShowCharacterScreenMark.Name = "chkShowCharacterScreenMark";
             this.chkShowCharacterScreenMark.Size = new System.Drawing.Size(138, 16);
             this.chkShowCharacterScreenMark.TabIndex = 3;
-            this.chkShowCharacterScreenMark.Text = "显示人物宽/普屏标记";
-            this.ttpCommon.SetToolTip(this.chkShowCharacterScreenMark, "是否在人物列表上显示宽/普屏标记");
+            this.chkShowCharacterScreenMark.Text = "Display people width / general screen mark";
+            this.ttpCommon.SetToolTip(this.chkShowCharacterScreenMark, "Whether to display a wide / Pu screen mark on the list of characters");
             this.chkShowCharacterScreenMark.UseVisualStyleBackColor = true;
             // 
             // btnOpenEditProgramPath
@@ -95,7 +95,7 @@
             this.txtEditProgramPath.Name = "txtEditProgramPath";
             this.txtEditProgramPath.Size = new System.Drawing.Size(245, 21);
             this.txtEditProgramPath.TabIndex = 1;
-            this.ttpCommon.SetToolTip(this.txtEditProgramPath, "可将程序拖拽到此处");
+            this.ttpCommon.SetToolTip(this.txtEditProgramPath, "Drag and drop the program here");
             this.txtEditProgramPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtPath_DragDrop);
             this.txtEditProgramPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtPath_DragEnter);
             // 
@@ -106,7 +106,7 @@
             this.lblEditProgram.Name = "lblEditProgram";
             this.lblEditProgram.Size = new System.Drawing.Size(65, 12);
             this.lblEditProgram.TabIndex = 0;
-            this.lblEditProgram.Text = "文本编辑器";
+            this.lblEditProgram.Text = "text editor";
             // 
             // btnOK
             // 
@@ -115,7 +115,7 @@
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
-            this.btnOK.Text = "确定";
+            this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -126,7 +126,7 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "取消";
+            this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // btnDefault
@@ -135,13 +135,13 @@
             this.btnDefault.Name = "btnDefault";
             this.btnDefault.Size = new System.Drawing.Size(75, 23);
             this.btnDefault.TabIndex = 4;
-            this.btnDefault.Text = "默认值";
+            this.btnDefault.Text = "Default";
             this.btnDefault.UseVisualStyleBackColor = true;
             this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
             // 
             // ofdExePath
             // 
-            this.ofdExePath.Filter = "可执行程序|*.exe";
+            this.ofdExePath.Filter = "Mugen Executable|*.exe";
             // 
             // grpMugenExePath
             // 
@@ -155,7 +155,7 @@
             this.grpMugenExePath.Size = new System.Drawing.Size(391, 43);
             this.grpMugenExePath.TabIndex = 0;
             this.grpMugenExePath.TabStop = false;
-            this.grpMugenExePath.Text = "MUGEN程序";
+            this.grpMugenExePath.Text = "Mugen program";
             // 
             // lblMugenExePath
             // 
@@ -164,7 +164,7 @@
             this.lblMugenExePath.Name = "lblMugenExePath";
             this.lblMugenExePath.Size = new System.Drawing.Size(83, 12);
             this.lblMugenExePath.TabIndex = 0;
-            this.lblMugenExePath.Text = "MUGEN程序位置";
+            this.lblMugenExePath.Text = "Mugen program location";
             // 
             // txtMugenExePath
             // 
@@ -175,7 +175,7 @@
             this.txtMugenExePath.Name = "txtMugenExePath";
             this.txtMugenExePath.Size = new System.Drawing.Size(245, 21);
             this.txtMugenExePath.TabIndex = 1;
-            this.ttpCommon.SetToolTip(this.txtMugenExePath, "可将程序拖拽到此处");
+            this.ttpCommon.SetToolTip(this.txtMugenExePath, "Drag and drop the program here");
             this.txtMugenExePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtPath_DragDrop);
             this.txtMugenExePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtPath_DragEnter);
             // 
@@ -210,7 +210,7 @@
             this.Name = "SettingForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "设置";
+            this.Text = "set up";
             this.Load += new System.EventHandler(this.SettingForm_Load);
             this.grpSetting.ResumeLayout(false);
             this.grpSetting.PerformLayout();

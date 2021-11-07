@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
+using System.IO;
+using System.Text;
 
 namespace MUGENCharsSet
 {
-    #region Sprite文件类
+    #region Sprite file class
 
     /// <summary>
-    /// Sprite文件类
+    /// Sprite file class
     /// </summary>
     public class SpriteFile
     {
-        /// <summary>SFF文件版本枚举</summary>
+        /// <summary>SFF file version enumeration</summary>
         public enum SffVerion { Unknown, V1_01, V1_02, V2_00 };
-        /// <summary>SFF V1.01头部字节大小</summary>
+
+        /// <summary>SFF V1.01 head byte size</summary>
         public const int HeaderSizeV1_01 = 33;
-        /// <summary>SFF V2.00头部字节大小</summary>
+
+        /// <summary>SFF V2.00 head byte size</summary>
         public const int HeaderSizeV2_00 = 53;
 
         private string _sffPath;
@@ -32,7 +32,7 @@ namespace MUGENCharsSet
         private SpriteFileSubNode _firstNode;
 
         /// <summary>
-        /// 获取SFF文件绝对路径
+        /// Get an absolute path of SFF files
         /// </summary>
         public string SffPath
         {
@@ -40,7 +40,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Signature
+        /// Get Signature
         /// </summary>
         public string Signature
         {
@@ -48,7 +48,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取SFF文件版本
+        /// Get SFF file versions
         /// </summary>
         public SffVerion Version
         {
@@ -56,7 +56,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Number of groups
+        /// Get Number of groups
         /// </summary>
         public int NumberOfGroups
         {
@@ -64,7 +64,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Number of images
+        /// Get Number of images
         /// </summary>
         public int NumberOfImages
         {
@@ -72,7 +72,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取第一个子节点的偏移量
+        /// Get the offset of the first child node
         /// </summary>
         public int FirstSubheaderOffset
         {
@@ -80,7 +80,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Size of subheader in bytes
+        /// Gets size of subheader in bytes
         /// </summary>
         public int SubheaderSize
         {
@@ -88,7 +88,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Palette type
+        /// Get a Palette type
         /// </summary>
         public bool SharedPalette
         {
@@ -96,7 +96,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取第一个子节点
+        /// Get the first child node
         /// </summary>
         public SpriteFileSubNode FirstSubNode
         {
@@ -118,9 +118,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定SFF文件路径创建<see cref="SpriteFile"/>类新实例
+        /// Create according to the specified SFF file path<see cref="SpriteFile"/>New instance
         /// </summary>
-        /// <param name="path">SFF文件绝对路径</param>
+        /// <param name="path">SFF file absolute path</param>
         /// <exception cref="System.ApplicationException"></exception>
         public SpriteFile(string path)
         {
@@ -140,12 +140,15 @@ namespace MUGENCharsSet
                     case "0101":
                         _version = SffVerion.V1_01;
                         break;
+
                     case "0102":
                         _version = SffVerion.V1_02;
                         break;
+
                     case "0002":
                         _version = SffVerion.V2_00;
                         break;
+
                     default:
                         _version = SffVerion.Unknown;
                         break;
@@ -156,7 +159,7 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("读取sff文件失败！");
+                throw new ApplicationException("Read the SFF file failed！");
             }
             finally
             {
@@ -166,14 +169,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取SFF V1.01版头部信息
+        /// Read SFF V1.01 version of the header information
         /// </summary>
-        /// <param name="br">当前SFF文件的二进制数据流</param>
+        /// <param name="br">Binary data stream of the current SFF file</param>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadHeaderV1_01(BinaryReader br)
         {
             byte[] data = br.ReadBytes(HeaderSizeV1_01);
-            if (data.Length != HeaderSizeV1_01) throw new ApplicationException("数据大小错误！");
+            if (data.Length != HeaderSizeV1_01) throw new ApplicationException("Data size error！");
             _signature = Encoding.Default.GetString(data, 0, 11);
             _numberOfGroups = BitConverter.ToInt32(data, 16);
             _numberOfImages = BitConverter.ToInt32(data, 20);
@@ -183,23 +186,23 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取SFF V2.00版头部信息
+        /// Read the SFF V2.00 version of the header information
         /// </summary>
-        /// <param name="br">当前SFF文件的二进制数据流</param>
+        /// <param name="br">Binary data stream of the current SFF file</param>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadHeaderV2_00(BinaryReader br)
         {
             byte[] data = br.ReadBytes(HeaderSizeV2_00);
-            if (data.Length != HeaderSizeV2_00) throw new ApplicationException("数据大小错误！");
+            if (data.Length != HeaderSizeV2_00) throw new ApplicationException("Data size error！");
             _firstSubheaderOffset = BitConverter.ToInt32(data, 36);
             _numberOfImages = BitConverter.ToInt32(data, 40);
         }
 
         /// <summary>
-        /// 获取格式化的版本信息
+        /// Get formatted version information
         /// </summary>
-        /// <param name="version">SFF版本</param>
-        /// <returns>格式化的版本信息</returns>
+        /// <param name="version">SFF version</param>
+        /// <returns>Formatted version information</returns>
         public static string GetFormatVersion(SffVerion version)
         {
             switch (version)
@@ -207,23 +210,24 @@ namespace MUGENCharsSet
                 case SffVerion.V1_01: return "1.01";
                 case SffVerion.V1_02: return "1.02";
                 case SffVerion.V2_00: return "2.00";
-                default: return "未知";
+                default: return "unknown";
             }
         }
     }
 
-    #endregion
+    #endregion Sprite file class
 
-    #region Sprite文件子节点类
+    #region Sprite file sub-node class
 
     /// <summary>
-    /// Sprite文件子节点类
+    /// Sprite file sub-node class
     /// </summary>
     public class SpriteFileSubNode
     {
-        /// <summary>SFF V1.01子节点头部字节大小</summary>
+        /// <summary>SFF V1.01 child node head byte size</summary>
         public const int HeaderSizeV1_01 = 32;
-        /// <summary>SFF V2.00子节点头部字节大小</summary>
+
+        /// <summary>SFF V2.00 child node head byte size</summary>
         public const int HeaderSizeV2_00 = 28;
 
         private int _nextOffset;
@@ -236,7 +240,7 @@ namespace MUGENCharsSet
         private byte[] _imageData;
 
         /// <summary>
-        /// 获取下一个子节点的偏移量
+        /// Get the offset of the next child node
         /// </summary>
         public int NextOffset
         {
@@ -244,7 +248,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取图像数据字节大小
+        /// Get image data byte size
         /// </summary>
         public int ImageSize
         {
@@ -252,7 +256,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取图像axis坐标
+        /// Get image AXIS coordinates
         /// </summary>
         public Point Axis
         {
@@ -260,7 +264,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Group number
+        /// Get groups number
         /// </summary>
         public int GroupNumber
         {
@@ -268,7 +272,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Image number (in the group)
+        /// Get image number (in the group)
         /// </summary>
         public int ImageNumber
         {
@@ -276,7 +280,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取Index of previous copy of sprite (linked sprites only)
+        /// Get Index of previous copy of sprite (linked sprites only)
         /// </summary>
         public int SharedIndex
         {
@@ -284,7 +288,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取True if palette is same as previous (or first) image
+        /// Get True if palette is same as previous (or first) image
         /// </summary>
         public bool CopyLastPalette
         {
@@ -292,7 +296,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取图像数据
+        /// Get image data
         /// </summary>
         public byte[] ImageData
         {
@@ -300,11 +304,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定SFF文件路径、文件流偏移量和SFF文件版本创建<see cref="SpriteFileSubNode"/>类新实例
+        /// Path according to the specified SFF file、File flow offset and SFF file version creation<see cref="SpriteFileSubNode"/>New instance
         /// </summary>
-        /// <param name="path">SFF文件绝对路径</param>
-        /// <param name="offset">子节点偏移量</param>
-        /// <param name="version">SFF文件版本</param>
+        /// <param name="path">SFF file absolute path</param>
+        /// <param name="offset">Child node offset</param>
+        /// <param name="version">SFF file version</param>
         /// <exception cref="System.ApplicationException"></exception>
         public SpriteFileSubNode(string path, int offset, SpriteFile.SffVerion version)
         {
@@ -321,7 +325,7 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("读取sff子节点失败！");
+                throw new ApplicationException("Read the SFF child node failed！");
             }
             finally
             {
@@ -331,14 +335,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取SFF V1.01版子节点信息
+        /// Read SFF V1.01 version node information
         /// </summary>
-        /// <param name="br">当前SFF文件的二进制数据流</param>
+        /// <param name="br">Binary data stream of the current SFF file</param>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadV1_01(BinaryReader br)
         {
             byte[] data = br.ReadBytes(HeaderSizeV1_01);
-            if (data.Length != HeaderSizeV1_01) throw new ApplicationException("数据大小错误！");
+            if (data.Length != HeaderSizeV1_01) throw new ApplicationException("Data size error！");
             _nextOffset = BitConverter.ToInt32(data, 0);
             _imageSize = BitConverter.ToInt32(data, 4);
             if (ImageSize == 0) throw new Exception();
@@ -351,14 +355,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取SFF V2.00版子节点信息
+        /// Read the SFF V2.00 version node information
         /// </summary>
-        /// <param name="br">当前SFF文件的二进制数据流</param>
+        /// <param name="br">Binary data stream of the current SFF file</param>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadV2_00(BinaryReader br)
         {
             byte[] data = br.ReadBytes(HeaderSizeV2_00);
-            if (data.Length != HeaderSizeV2_00) throw new ApplicationException("数据大小错误！");
+            if (data.Length != HeaderSizeV2_00) throw new ApplicationException("Data size error！");
             _groupNumber = BitConverter.ToInt16(data, 0);
             _imageNumber = BitConverter.ToInt16(data, 2);
             _axis = new Point(BitConverter.ToInt16(data, 8), BitConverter.ToInt16(data, 10));
@@ -366,5 +370,5 @@ namespace MUGENCharsSet
         }
     }
 
-    #endregion
+    #endregion Sprite file sub-node class
 }

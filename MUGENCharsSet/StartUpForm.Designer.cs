@@ -53,7 +53,7 @@
             this.grpMugenExePath.Size = new System.Drawing.Size(387, 43);
             this.grpMugenExePath.TabIndex = 1;
             this.grpMugenExePath.TabStop = false;
-            this.grpMugenExePath.Text = "MUGEN程序";
+            this.grpMugenExePath.Text = "Mugen program";
             // 
             // lblMugenExePath
             // 
@@ -62,7 +62,7 @@
             this.lblMugenExePath.Name = "lblMugenExePath";
             this.lblMugenExePath.Size = new System.Drawing.Size(83, 12);
             this.lblMugenExePath.TabIndex = 0;
-            this.lblMugenExePath.Text = "MUGEN程序位置";
+            this.lblMugenExePath.Text = "Mugen program location";
             // 
             // txtMugenExePath
             // 
@@ -73,7 +73,7 @@
             this.txtMugenExePath.Name = "txtMugenExePath";
             this.txtMugenExePath.Size = new System.Drawing.Size(253, 21);
             this.txtMugenExePath.TabIndex = 1;
-            this.ttpCommon.SetToolTip(this.txtMugenExePath, "可将程序拖拽到此处");
+            this.ttpCommon.SetToolTip(this.txtMugenExePath, "Drag and drop the program here");
             this.txtMugenExePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtMugenExePath_DragDrop);
             this.txtMugenExePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtMugenExePath_DragEnter);
             // 
@@ -91,7 +91,7 @@
             // 
             // ofdOpenMugenExePath
             // 
-            this.ofdOpenMugenExePath.Filter = "可执行程序|*.exe";
+            this.ofdOpenMugenExePath.Filter = "Mugen Executable|*.exe";
             // 
             // btnOK
             // 
@@ -101,7 +101,7 @@
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
-            this.btnOK.Text = "确定";
+            this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -113,7 +113,7 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "取消";
+            this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // StartUpForm
@@ -132,7 +132,7 @@
             this.MinimizeBox = false;
             this.Name = "StartUpForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "请选择MUGEN程序位置";
+            this.Text = "Please select the MUGEN program location";
             this.Load += new System.EventHandler(this.StartUpForm_Load);
             this.grpMugenExePath.ResumeLayout(false);
             this.grpMugenExePath.PerformLayout();

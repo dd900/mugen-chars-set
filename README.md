@@ -1,58 +1,63 @@
-# M.U.G.E.N人物设置
-用于M.U.G.E.N人物设置的小工具  
-注：该项目已关闭，如有需要可自行Fork
+V1.7.1 (2021-11-8)
+    Translated (loosely)
+    small fixes
 
-## 使用说明
-运行需[.NET Framework 4.0](https://www.microsoft.com/zh-cn/download/details.aspx?id=17718)框架，如出现运行错误，请下载安装所需组件
 
-## 下载地址
-[MUGENCharsSet V1.7.0.zip](https://github.com/miaolapd/mugen-chars-set/raw/master/Releases/MUGENCharsSet%20V1.7.0.zip)
+# M.u.g.e.n
+Gadgets for M.u.g.e.n
+Note: The project is closed, if you need it, you can
 
-_By MugenCharsSet开发小组_
+## Instructions for use
+Running [.NET Framework 4.0] (https://www.microsoft.com/zh-/download/details.aspx?id=17718) framework, if there is a run error, please download the installation required components
 
-## 更新日志
+## download link
+[MugenChars set v1.7.0.zip] (https://github.com/miaolapd/mugen-chars-set/Raw/master/releases/mugenchars set% 20v1.7.0.zip)
+
+ By Mugen Chars SET Development Team
+
+## Update log
 * V1.7.0 (2016-10-17)
-  * 恢复使用默认编码保存MUGEN相关文件
-  * 支持保存人物中文名
+  * Restore uses the default code to save MUGEN related files
+  * Support for saving people Chinese name
 * V1.6.0 (2016-10-16)
-  * ~~采用UTF-8编码保存MUGEN相关文件~~ __（有严重BUG，请勿使用该版本）__
+  * ~~ Use UTF-8 encoding to save Mugen related files ~~ (with serious bug, do not use this version)
 * V1.5.0 (2014-01-23)
-  * 更换为.NET Framework 4.0框架
-  * 增加添加人物文件或压缩包的功能
-  * 增加更换fight.def文件的功能
-  * 未加入select.def文件的人物显示未加入标志
-  * 可将不在当前人物列表里的人物def文件拖拽到窗口上
-  * 使用xml文件保存程序配置
+  * Replace it into .NET Framework 4.0 framework
+  * Increase the function of adding a character file or compressed package
+  * Add the function of replacing the Fight.def file
+  * The characters who have not added Select.def file display unsigned
+  * Can be dragged to the window from the character DEF file in the current character list
+  * Save program configuration using XML file
 * V1.4.1 (2014-01-11)
-  * 增加预览使用指定色表文件的人物模型的功能
+  * Increase the function of previewing the character model of specified color table file
 * V1.4.0 (2014-01-10)
-  * 增加显示人物模型的功能
-  * 增加选择是否显示人物宽/普屏标记的功能
+  * Increase the function of displaying the character model
+  * Increase whether the function is displayed to display the character of the people
 * V1.3.2 (2014-01-03)
-  * 支持MUGEN win版
-  * 按键设置改为显示按键名称
+  * Support Mugen WIN version
+  * Button settings to display the button name
 * V1.3.1 (2013-12-24)
-  * 修正修改重力时的BUG
+  * Correct the bug when modifying gravity
 * V1.3.0 (2013-12-24)
-  * 增加转换宽/普屏人物包的功能
-  * 增加编辑主程序配置功能
-  * 删除人物时同时删除select.def上的人物
-  * 修正读取文件时的一些BUG
+  * Increase the function of converting a wide / Pufang character package
+  * Add edit main program configuration
+  * Delete the characters while deleting the characters on Select.def
+  * Some bugs when reading files
 * V1.2.1 (2013-12-19)
-  * 修正选择select.def文件查找路径的BUG
+  * Fixed the bug of the Select.def file lookup path
 * V1.2.0 (2013-12-19)
-  * 重构程序代码
-  * 增加选择system.def和select.def功能
-  * 增加全部搜索功能
-  * 增加复制人物def文件路径功能
-  * 增加显示人物总数及已选项目数功能
-  * 其他一些小修改
+  * Reconstruction procedure code
+  * Add to choose System.def and Select.DEF functionality
+  * Increase all search functions
+  * Add a replication person DEF file path function
+  * Increase the total number of characters and the number of selected items
+  * Other small modifications
 * V1.1.0 (2013-12-13)
-  * 增加读取select.def中的人物列表的功能
-  * 增加删除人物的功能
-  * 批量编辑时显示数值相同的属性
+  * Add the function of reading the character list in Select.def
+  * Increase the function of deleting characters
+  * Display the same attribute as the value when batch editing
 * V1.0.0 (2013-12-11)
-  * 第一次发布
+  * First release
 
-## License
-[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+## license
+[Apache license, Version 2.0] (http://www.apache.org/licenses/license-2.0)

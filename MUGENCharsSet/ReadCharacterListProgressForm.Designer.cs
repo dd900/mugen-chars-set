@@ -54,7 +54,7 @@
             this.Name = "ReadCharacterListProgressForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "正在读取人物列表……";
+            this.Text = "List of characters……";
             this.Load += new System.EventHandler(this.ReadCharacterListProgressForm_Load);
             this.ResumeLayout(false);
 

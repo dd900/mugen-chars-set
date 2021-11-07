@@ -46,7 +46,7 @@
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "确定";
+            this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
             // picIcon
@@ -66,7 +66,7 @@
             this.lblAppName.Name = "lblAppName";
             this.lblAppName.Size = new System.Drawing.Size(107, 12);
             this.lblAppName.TabIndex = 1;
-            this.lblAppName.Text = "M.U.G.E.N人物设置";
+            this.lblAppName.Text = "M.U.G.E.N character settings";
             // 
             // lnkAppUrl
             // 
@@ -76,7 +76,7 @@
             this.lnkAppUrl.Size = new System.Drawing.Size(263, 12);
             this.lnkAppUrl.TabIndex = 4;
             this.lnkAppUrl.TabStop = true;
-            this.lnkAppUrl.Text = "https://github.com/miaolapd/mugen-chars-set";
+            this.lnkAppUrl.Text = "https://github.com/dd900/mugen-chars-set";
             this.lnkAppUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkAppUrl_LinkClicked);
             // 
             // lblAuthor
@@ -86,7 +86,7 @@
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.Size = new System.Drawing.Size(113, 12);
             this.lblAuthor.TabIndex = 3;
-            this.lblAuthor.Text = "程序设计：喵拉布丁";
+            this.lblAuthor.Text = "Programming: Meow La Pudding";
             // 
             // lblCompany
             // 
@@ -95,7 +95,7 @@
             this.lblCompany.Name = "lblCompany";
             this.lblCompany.Size = new System.Drawing.Size(131, 12);
             this.lblCompany.TabIndex = 2;
-            this.lblCompany.Text = "MugenCharsSet开发小组";
+            this.lblCompany.Text = "MugenCharsSet Development Team";
             // 
             // AboutForm
             // 
@@ -117,7 +117,7 @@
             this.Name = "AboutForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "关于本程序";
+            this.Text = "About this program";
             this.Load += new System.EventHandler(this.AboutForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
             this.ResumeLayout(false);

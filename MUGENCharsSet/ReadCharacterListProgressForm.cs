@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MUGENCharsSet
@@ -17,7 +11,7 @@ namespace MUGENCharsSet
         /// <summary>
         /// 读取人物列表方法委托
         /// </summary>
-        delegate void ReadCharacterListDelegate();
+        private delegate void ReadCharacterListDelegate();
 
         public ReadCharacterListProgressForm()
         {

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 设置窗口类
+    /// Set the window class
     /// </summary>
     public partial class SettingForm : Form
     {
@@ -21,12 +15,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 显示操作成功消息
+        /// Show operation success message
         /// </summary>
-        /// <param name="msg">消息</param>
+        /// <param name="msg">information</param>
         private void ShowSuccessMsg(string msg)
         {
-            MessageBox.Show(msg, "操作成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(msg, "Successful operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>
@@ -35,7 +29,7 @@ namespace MUGENCharsSet
         /// <param name="msg">消息</param>
         private void ShowErrorMsg(string msg)
         {
-            MessageBox.Show(msg, "操作失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(msg, "operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
@@ -49,7 +43,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击打开MUGEN程序路径按钮时发生
+        /// When you click Open Mugen Program Path button
         /// </summary>
         private void btnOpenMugenExePath_Click(object sender, EventArgs e)
         {
@@ -65,7 +59,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击打开文本编辑器程序路径按钮时发生
+        /// When you click the Open Text Editor Program Path button
         /// </summary>
         private void btnOpenEditProgramPath_Click(object sender, EventArgs e)
         {
@@ -76,7 +70,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击确定按钮时发生
+        /// When you click the OK button
         /// </summary>
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -88,7 +82,7 @@ namespace MUGENCharsSet
                 string mugenCfgPath = txtMugenExePath.Text.Trim().GetDirPathOfFile() + MugenSetting.DataDir + MugenSetting.MugenCfgFileName;
                 if (!File.Exists(mugenCfgPath))
                 {
-                    throw new ApplicationException("mugen.cfg文件不存在！");
+                    throw new ApplicationException("Mugen.cfg file does not exist！");
                 }
                 if (AppConfig.MugenExePath != txtMugenExePath.Text.Trim())
                 {
@@ -98,7 +92,7 @@ namespace MUGENCharsSet
                     owner.ReadMugenCfgSetting();
                 }
             }
-            catch(ApplicationException ex)
+            catch (ApplicationException ex)
             {
                 ShowErrorMsg(ex.Message);
                 return;
@@ -106,7 +100,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击默认值按钮时发生
+        /// When you click the default value button
         /// </summary>
         private void btnDefault_Click(object sender, EventArgs e)
         {
@@ -115,7 +109,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当文件拖拽到程序路径文本框时发生
+        /// When the file drags and drops to the program path text box
         /// </summary>
         private void txtPath_DragDrop(object sender, DragEventArgs e)
         {

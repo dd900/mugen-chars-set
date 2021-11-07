@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using System.IO;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// XML配置类
+    /// XML configuration class
     /// </summary>
     public class XmlConfig
     {
-        /// <summary>默认根元素名称</summary>
+        /// <summary>Default root element name</summary>
         public const string DefaultRootName = "config";
 
         private readonly string _configPath;
@@ -20,7 +17,7 @@ namespace MUGENCharsSet
         private readonly XDocument _document = null;
 
         /// <summary>
-        /// 获取当前配置文件绝对路径
+        /// Get the absolute path of the current configuration file
         /// </summary>
         public string ConfigPath
         {
@@ -28,7 +25,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取当前配置文件的<see cref="XDocument"/>对象
+        /// Get the current configuration file<see cref="XDocument"/>Object
         /// </summary>
         public XDocument Document
         {
@@ -36,7 +33,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取根元素
+        /// Get root elements
         /// </summary>
         public XElement Root
         {
@@ -44,7 +41,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取根元素名称
+        /// Get the name of the root element
         /// </summary>
         public string RootName
         {
@@ -52,11 +49,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定配置文件路径和根元素名称创建<see cref="XmlConfig"/>类新实例，可以指示加载失败时是否创建新配置文件
+        /// Create according to the specified configuration file path and root element name<see cref="XmlConfig"/>Class new instance, can indicate whether to create a new configuration file when loading fails
         /// </summary>
-        /// <param name="configPath">配置文件绝对路径</param>
-        /// <param name="isOverWrite">加载失败时是否创建新配置文件</param>
-        /// <param name="rootName">根元素名称</param>
+        /// <param name="configPath">Profile absolute path</param>
+        /// <param name="isOverWrite">Whether to create a new configuration file when loading fails</param>
+        /// <param name="rootName">Root element name</param>
         /// <exception cref="System.ApplicationException"></exception>
         public XmlConfig(string configPath, bool isOverWrite = false, string rootName = DefaultRootName)
         {
@@ -70,27 +67,27 @@ namespace MUGENCharsSet
             {
                 if (isOverWrite)
                 {
-                    if (!CreateConfigFile()) throw new ApplicationException("创建配置文件失败！");
+                    if (!CreateConfigFile()) throw new ApplicationException("Create a configuration file failed！");
                     try
                     {
                         _document = XDocument.Load(ConfigPath);
                     }
                     catch (Exception)
                     {
-                        throw new ApplicationException("加载配置文件失败！");
+                        throw new ApplicationException("Loading the configuration file failed！");
                     }
                 }
                 else
                 {
-                    throw new ApplicationException("加载配置文件失败！");
+                    throw new ApplicationException("Loading the configuration file failed！");
                 }
             }
         }
 
         /// <summary>
-        /// 保存配置文件
+        /// Save the configuration file
         /// </summary>
-        /// <returns>是否保存成功</returns>
+        /// <returns>Whether saving success</returns>
         public bool Save()
         {
             try
@@ -105,9 +102,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 创建配置文件
+        /// Create a configuration file
         /// </summary>
-        /// <returns>是否创建成功</returns>
+        /// <returns>Whether to create success</returns>
         private bool CreateConfigFile()
         {
             try
@@ -123,11 +120,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的值
+        /// Get the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>元素的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Element value</returns>
         public string GetValue(string elementName, string defaultValue)
         {
             try
@@ -143,11 +140,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的值
+        /// Get the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>元素的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Element value</returns>
         public int GetValue(string elementName, int defaultValue)
         {
             try
@@ -161,11 +158,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的值
+        /// Get the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>元素的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Element value</returns>
         public bool GetValue(string elementName, bool defaultValue)
         {
             try
@@ -179,11 +176,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 设置指定元素的值
+        /// Set the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="value">元素的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="value">Element value</param>
+        /// <returns>Whether to set success</returns>
         public bool SetValue(string elementName, string value)
         {
             try
@@ -207,70 +204,70 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 设置指定元素的值
+        /// Set the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="value">元素的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="value">Element value</param>
+        /// <returns>Whether to set success</returns>
         public bool SetValue(string elementName, int value)
         {
             return SetValue(elementName, value.ToString());
         }
 
         /// <summary>
-        /// 设置指定元素的值
+        /// Set the value of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="value">元素的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="value">Element value</param>
+        /// <returns>Whether to set success</returns>
         public bool SetValue(string elementName, bool value)
         {
             return SetValue(elementName, value.ToString());
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public string GetAttributeValue(string elementName, string attributeName, string defaultValue)
         {
             return GetAttributeValue(Root.Element(elementName), attributeName, defaultValue);
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public int GetAttributeValue(string elementName, string attributeName, int defaultValue)
         {
             return GetAttributeValue(Root.Element(elementName), attributeName, defaultValue);
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public bool GetAttributeValue(string elementName, string attributeName, bool defaultValue)
         {
             return GetAttributeValue(Root.Element(elementName), attributeName, defaultValue);
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public string GetAttributeValue(XElement element, string attributeName, string defaultValue)
         {
             try
@@ -293,12 +290,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="element">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="element">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public int GetAttributeValue(XElement element, string attributeName, int defaultValue)
         {
             try
@@ -312,12 +309,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的指定属性的值
+        /// Get the value of the specified properties of the specified element
         /// </summary>
-        /// <param name="element">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="defaultValue">默认值</param>
-        /// <returns>属性的值</returns>
+        /// <param name="element">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="defaultValue">Defaults</param>
+        /// <returns>Value of the attribute</returns>
         public bool GetAttributeValue(XElement element, string attributeName, bool defaultValue)
         {
             try
@@ -331,12 +328,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 设置指定元素的指定属性的值
+        /// Set the value of the specified attribute of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="value">属性的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="value">Value of the attribute</param>
+        /// <returns>Whether to set success</returns>
         public bool SetAttributeValue(string elementName, string attributeName, string value)
         {
             try
@@ -360,35 +357,35 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 设置指定元素的指定属性的值
+        /// Set the value of the specified attribute of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="value">属性的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="value">Value of the attribute</param>
+        /// <returns>Whether to set success</returns>
         public bool SetAttributeValue(string elementName, string attributeName, int value)
         {
             return SetAttributeValue(elementName, attributeName, value.ToString());
         }
 
         /// <summary>
-        /// 设置指定元素的指定属性的值
+        /// Set the value of the specified attribute of the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <param name="value">属性的值</param>
-        /// <returns>是否设置成功</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <param name="value">Value of the attribute</param>
+        /// <returns>Whether to set success</returns>
         public bool SetAttributeValue(string elementName, string attributeName, bool value)
         {
             return SetAttributeValue(elementName, attributeName, value.ToString());
         }
 
         /// <summary>
-        /// 获取指定元素的经过筛选的子元素集合
+        /// Gets a collection of filtered child elements for specified elements
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="subElementName">子元素名称</param>
-        /// <returns>子元素集合</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="subElementName">Child element name</param>
+        /// <returns>Child elements collection</returns>
         public IEnumerable<XElement> GetElements(string elementName, string subElementName)
         {
             try
@@ -402,10 +399,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的全部子元素集合
+        /// Get all sub-elements collection of specified elements
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <returns>子元素集合</returns>
+        /// <param name="elementName">Element name</param>
+        /// <returns>Child elements collection</returns>
         public IEnumerable<XElement> GetElements(string elementName)
         {
             try
@@ -419,11 +416,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的经过筛选的属性集合
+        /// Gets the filtered property set for the specified element
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <param name="attributeName">属性名称</param>
-        /// <returns>属性集合</returns>
+        /// <param name="elementName">Element name</param>
+        /// <param name="attributeName">Attribute name</param>
+        /// <returns>Attribute collection</returns>
         public IEnumerable<XAttribute> GetAttributes(string elementName, string attributeName)
         {
             try
@@ -437,10 +434,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定元素的全部属性集合
+        /// Get all property sets for specified elements
         /// </summary>
-        /// <param name="elementName">元素名称</param>
-        /// <returns>属性集合</returns>
+        /// <param name="elementName">Element name</param>
+        /// <returns>Attribute collection</returns>
         public IEnumerable<XAttribute> GetAttributes(string elementName)
         {
             try
@@ -452,6 +449,5 @@ namespace MUGENCharsSet
                 return new List<XAttribute>();
             }
         }
-
     }
 }

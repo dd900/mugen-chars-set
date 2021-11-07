@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// 有关程序集的常规信息通过以下
-// 特性集控制。更改这些特性值可修改
-// 与程序集关联的信息。
-[assembly: AssemblyTitle("M.U.G.E.N人物设置")]
-[assembly: AssemblyDescription("M.U.G.E.N人物设置")]
+// General information about the assembly passes the following
+// Feature set control. Changing these characteristic values ​​can be modified
+// Information associated with the assembly.
+[assembly: AssemblyTitle("M.U.G.E.N Character settings")]
+[assembly: AssemblyDescription("M.U.G.E.N Character settings")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MUGENCharsSetTeam")]
 [assembly: AssemblyProduct("MUGENCharsSet")]
@@ -14,23 +13,23 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// 将 ComVisible 设置为 false 使此程序集中的类型
-// 对 COM 组件不可见。  如果需要从 COM 访问此程序集中的类型，
-// 则将该类型上的 ComVisible 特性设置为 true。
+// Set ComVisible to false to make the type in this assembly
+// Not visible to COM components. If you need to access the types in this assembly from COM,
+// Then the ComVisible feature on the type is set to true.
 [assembly: ComVisible(false)]
 
-// 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
+// If this project is exposed to COM, the following GUID is used for the ID of the type library
 [assembly: Guid("47222015-e7fe-427f-a59d-388e94bd0760")]
 
-// 程序集的版本信息由下面四个值组成: 
+// The version information of the assembly consists of the following four values:
 //
-//      主版本
-//      次版本 
-//      生成号
-//      修订号
+// Major version
+// minor version
+// Generation number
+// Amendment No
 //
-// 可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
-// 方法是按如下所示使用“*”: 
+// You can specify all these values, or you can use the default values ​​of "Generation Number" and "Revision Number",
+// The method is to use "*" as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.7.0.1011")]
 [assembly: AssemblyFileVersion("1.7.0.1011")]

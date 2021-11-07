@@ -1,47 +1,45 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 程序主窗口类
+    /// Program main window class
     /// </summary>
     public partial class MainForm : Form
     {
-        #region 类常量
+        #region Typical
 
-        /// <summary>多值的显示值</summary>
-        public const string MultiValue = "(多值)";
-        /// <summary>序号的列数</summary>
+        /// <summary>Multi-value display value</summary>
+        public const string MultiValue = "(Multivalued)";
+
+        /// <summary>Number of columns of the serial number</summary>
         public const int PalNoColumnNo = 0;
-        /// <summary>Pal值的列数</summary>
+
+        /// <summary>The number of columns of the PAL value</summary>
         public const int PalValColumnNo = 1;
 
-        #endregion
+        #endregion Typical
 
-        #region 类私有变量
+        #region Private variable
+
         private bool _modifyEnabled = false;
         private bool _multiModified = false;
         private List<Character> _characterList;
         private bool _characterListControlPreparing = false;
 
-        #endregion
+        #endregion Private variable
 
-        #region 类属性
+        #region Class properties
 
         /// <summary>
-        /// 获取或设置MUGEN人物列表
+        /// Get or set a list of Mugen characters
         /// </summary>
         private List<Character> CharacterList
         {
@@ -50,7 +48,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物列表控件是否处于配置DataSource准备过程中
+        /// Get or set whether the character list control is in the configuration Data Source preparation process
         /// </summary>
         private bool CharacterListControlPreparing
         {
@@ -59,7 +57,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置是否进入批量修改模式
+        /// Get or set to enter bulk modification mode
         /// </summary>
         private bool MultiModified
         {
@@ -87,7 +85,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置是否进入修改模式
+        /// Get or set to enter modification mode
         /// </summary>
         private bool ModifyEnabled
         {
@@ -113,35 +111,35 @@ namespace MUGENCharsSet
             }
         }
 
-        #endregion
+        #endregion Class properties
 
         public MainForm()
         {
             InitializeComponent();
         }
 
-        #region 类方法
+        #region Class method
 
         /// <summary>
-        /// 显示操作成功消息
+        /// Show operation success message
         /// </summary>
-        /// <param name="msg">消息</param>
+        /// <param name="msg">information</param>
         private void ShowSuccessMsg(string msg)
         {
-            MessageBox.Show(msg, "操作成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(msg, "Successful operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>
-        /// 显示操作失败消息
-        /// </summary>
-        /// <param name="msg">消息</param>
+        /// Display operation failure message
+        /// </ summary>
+        /// <param name = "msg"> Message </ param>
         private void ShowErrorMsg(string msg)
         {
-            MessageBox.Show(msg, "操作失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(msg, "operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
-        /// 重置人物属性设置及色表设置控件
+        /// Resets Character Attribute Settings and Color Table Settings Controls
         /// </summary>
         private void ResetCharacterControls()
         {
@@ -160,20 +158,20 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取程序配置
+        /// Read program configuration
         /// </summary>
         private void ReadConfig()
         {
             if (!AppConfig.Read())
             {
-                ShowErrorMsg("读取配置文件失败！");
+                ShowErrorMsg("Read the configuration file failed！");
             }
             chkAutoSort.Checked = AppConfig.AutoSort;
             cboReadCharacterType.SelectedIndex = (int)AppConfig.ReadCharacterType;
         }
 
         /// <summary>
-        /// 读取人物列表
+        /// Read the list of characters
         /// </summary>
         public void ReadCharacterList(bool showProgress = false)
         {
@@ -196,7 +194,7 @@ namespace MUGENCharsSet
             }
             if (!Directory.Exists(MugenSetting.MugenCharsDirPath))
             {
-                ShowErrorMsg("无法找到MUGEN人物文件夹！");
+                ShowErrorMsg("Unable to find Mugen character folder！");
                 return;
             }
             Panel pnlProgress = null;
@@ -230,9 +228,9 @@ namespace MUGENCharsSet
             {
                 RefreshCharacterListDataSource(CharacterList);
             }
-            lblMugenInfo.Text = String.Format("MUGEN版本：{0}  画面包状态：{1}屏", MugenSetting.Version == MugenSetting.MugenVersion.WIN ? "win" : "1.x",
-                MugenSetting.IsWideScreen ? "宽" : "普");
-            lblCharacterCount.Text = String.Format("共{0}项", lstCharacterList.Items.Count);
+            lblMugenInfo.Text = string.Format("Mugen version：{0}  Package：{1}Screen", MugenSetting.Version == MugenSetting.MugenVersion.WIN ? "win" : "1.x",
+                MugenSetting.IsWideScreen ? "width" : "normal");
+            lblCharacterCount.Text = string.Format("Total {0} item", lstCharacterList.Items.Count);
             fswCharacterCns.Path = MugenSetting.MugenCharsDirPath;
             fswCharacterCns.EnableRaisingEvents = true;
             SetMugenVersionForControls(MugenSetting.Version);
@@ -249,9 +247,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 刷新人物列表控件的DataSource
-        /// </summary>
-        /// <param name="characterList">人物列表</param>
+        /// Refresh the Data Source of the character list control
+        /// </ summary>
+        /// <param name = "character list"> Product list </ param>
         private void RefreshCharacterListDataSource(List<Character> characterList)
         {
             BindingSource bs = new BindingSource();
@@ -265,8 +263,8 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取单个人物设置
-        /// </summary>
+        /// Read a single character setting
+        /// </ summary>
         private void ReadCharacter()
         {
             if (lstCharacterList.SelectedItems.Count != 1) return;
@@ -275,7 +273,7 @@ namespace MUGENCharsSet
             Character character = (Character)lstCharacterList.SelectedItem;
             if (!File.Exists(character.DefPath))
             {
-                ShowErrorMsg("人物def文件不存在！");
+                ShowErrorMsg("Character def file does not exist！");
                 return;
             }
             character.ReadPalSetting();
@@ -287,11 +285,11 @@ namespace MUGENCharsSet
             txtDefence.Text = character.Defence.ToString();
             txtPower.Text = character.Power.ToString();
             if (character.Sprite == null) character.ReadSpriteFile();
-            lblSpriteVersion.Text = "SFF版本：" + SpriteFile.GetFormatVersion(character.SpriteVersion);
+            lblSpriteVersion.Text = "SFF version：" + SpriteFile.GetFormatVersion(character.SpriteVersion);
             if (character.PalList.Count > 0)
             {
                 string[] selectableActFileList = character.SelectableActFileList;
-                cboSelectableActFileList.Items.Add("原始图像");
+                cboSelectableActFileList.Items.Add("The original image");
                 cboSelectableActFileList.Items.AddRange(selectableActFileList);
                 cboSelectableActFileList.SelectedIndex = 0;
                 DataGridViewComboBoxColumn dgvPalFileList = (DataGridViewComboBoxColumn)dgvPal.Columns[PalValColumnNo];
@@ -316,7 +314,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量读取人物设置
+        /// Batch reading character settings
         /// </summary>
         private void MultiReadCharacter()
         {
@@ -352,9 +350,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 在标签上显示当前人物的def文件相对路径
+        /// Display the relative path of the DEF file of the current figure on the label
         /// </summary>
-        /// <param name="defFullPath">def文件绝对路径</param>
+        /// <param name="defFullPath">DEF file absolute path</param>
         private void SetSingleCharacterLabel(Character character)
         {
             string path = character.DefPath.Substring(MugenSetting.MugenCharsDirPath.Length);
@@ -363,7 +361,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 在标签上显示当前批量读取的人物的def文件相对路径
+        /// Show the DEF file of the current batch read by the current batch
         /// </summary>
         private void SetMutliCharacterLabel(Character[] characterList)
         {
@@ -377,7 +375,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 修改单个人物设置
+        /// Modify single character settings
         /// </summary>
         private void ModifyCharacter()
         {
@@ -386,9 +384,7 @@ namespace MUGENCharsSet
             string oriName = character.Name;
             try
             {
-                string name, displayName;
-                int life, attack, defence, power;
-                ReadCharacterControlsValue(out name, out displayName, out life, out attack, out defence, out power);
+                ReadCharacterControlsValue(out string name, out string displayName, out int life, out int attack, out int defence, out int power);
                 character.Name = name;
                 character.DisplayName = displayName;
                 character.Life = life;
@@ -409,7 +405,7 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                ShowErrorMsg("修改失败！");
+                ShowErrorMsg("fail to edit！");
                 return;
             }
             finally
@@ -422,11 +418,11 @@ namespace MUGENCharsSet
                 RefreshCharacterListDataSource(CharacterList);
                 lstCharacterList.SelectedIndex = index;
             }
-            ShowSuccessMsg("修改成功！");
+            ShowSuccessMsg("Successfully modified！");
         }
 
         /// <summary>
-        /// 批量修改人物设置
+        /// Batch modification person setting
         /// </summary>
         private void MultiModifyCharacter()
         {
@@ -436,9 +432,7 @@ namespace MUGENCharsSet
             int total = 0;
             try
             {
-                string name, displayName;
-                int life, attack, defence, power;
-                ReadCharacterControlsValue(out name, out displayName, out life, out attack, out defence, out power);
+                ReadCharacterControlsValue(out string name, out string displayName, out int life, out int attack, out int defence, out int power);
                 for (int i = 0; i < characterList.Length; i++)
                 {
                     characterList[i].Life = life;
@@ -456,17 +450,17 @@ namespace MUGENCharsSet
             total = Character.MultiSave(characterList);
             if (total > 0)
             {
-                ShowSuccessMsg(String.Format("共{0}条项目修改成功！", total));
+                ShowSuccessMsg(string.Format("A total of {0} items to modify success！", total));
             }
             else
             {
-                ShowErrorMsg("修改失败！");
+                ShowErrorMsg("fail to edit！");
             }
             fswCharacterCns.EnableRaisingEvents = true;
         }
 
         /// <summary>
-        /// 读取人物属性控件的值
+        /// Read the value of the character attribute control
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadCharacterControlsValue(out string name, out string displayName,
@@ -481,14 +475,14 @@ namespace MUGENCharsSet
                     TextBox txtTemp = (TextBox)control;
                     try
                     {
-                        if (txtTemp.Text.Trim() == String.Empty) throw new ApplicationException("字段不得为空！");
+                        if (txtTemp.Text.Trim() == string.Empty) throw new ApplicationException("Fields must not be empty！");
                         TextBox[] txtIntegerArray = { txtLife, txtAttack, txtDefence, txtPower };
                         if (txtIntegerArray.Contains(txtTemp))
                         {
                             int value = 0;
                             if (txtTemp.Text.Trim() == MultiValue) value = 0;
                             else value = Convert.ToInt32(txtTemp.Text.Trim());
-                            if (value < 0) throw new ApplicationException("数值不得小于0！");
+                            if (value < 0) throw new ApplicationException("Numerical value is not less than 0！");
                             if (txtTemp == txtLife) life = value;
                             else if (txtTemp == txtAttack) attack = value;
                             else if (txtTemp == txtDefence) defence = value;
@@ -504,13 +498,13 @@ namespace MUGENCharsSet
                     {
                         txtTemp.SelectAll();
                         txtTemp.Focus();
-                        throw new ApplicationException("数值格式错误！");
+                        throw new ApplicationException("Numerical format error！");
                     }
                     catch (OverflowException)
                     {
                         txtTemp.SelectAll();
                         txtTemp.Focus();
-                        throw new ApplicationException("数值超过范围！");
+                        throw new ApplicationException("Numerical value！");
                     }
                     catch (ApplicationException ex)
                     {
@@ -523,14 +517,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取Pal属性字段
+        /// Read the PAL property field
         /// </summary>
         private void ReadPalValues(Dictionary<string, string> palList)
         {
             for (int i = 0; i < dgvPal.Rows.Count; i++)
             {
                 if (dgvPal.Rows[i].Cells[PalValColumnNo].Value != null &&
-                    dgvPal.Rows[i].Cells[PalValColumnNo].Value.ToString() != String.Empty)
+                    dgvPal.Rows[i].Cells[PalValColumnNo].Value.ToString() != string.Empty)
                 {
                     palList[dgvPal.Rows[i].Cells[PalNoColumnNo].Value.ToString()] =
                         dgvPal.Rows[i].Cells[PalValColumnNo].Value.ToString();
@@ -539,13 +533,13 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 在人物列表里查找关键字
+        /// Find keywords in the list of characters
         /// </summary>
-        /// <param name="isUp">是否向上搜索</param>
+        /// <param name="isUp">Whether to search up</param>
         private void SearchKeyword(bool isUp)
         {
             string keyword = txtKeyword.Text.Trim();
-            if (keyword == String.Empty) return;
+            if (keyword == string.Empty) return;
             if (lstCharacterList.Items.Count == 0) return;
             ModifyEnabled = false;
             int searchIndex = -1;
@@ -602,12 +596,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 在人物列表里查找全部关键字
+        /// Find all keywords in the list of characters
         /// </summary>
         private void SearchAllKeyword()
         {
             string keyword = txtKeyword.Text.Trim();
-            if (keyword == String.Empty) return;
+            if (keyword == string.Empty) return;
             if (lstCharacterList.Items.Count == 0) return;
             lstCharacterList.ClearSelected();
             ModifyEnabled = false;
@@ -624,27 +618,27 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 转换为宽/普屏人物包
+        /// Convert to a wide / Push-screen character package
         /// </summary>
-        /// <param name="isWideScreen">是否宽屏</param>
+        /// <param name="isWideScreen">Whether a widescreen</param>
         private void ConvertToFitScreen(bool isWideScreen)
         {
             if (lstCharacterList.SelectedItems.Count == 0) return;
             string stcommonPath = MugenSetting.MugenDataDirPath + MugenSetting.StcommonFileName;
             if (!File.Exists(stcommonPath))
             {
-                ShowErrorMsg("公共common1.cns文件不存在！");
+                ShowErrorMsg("Public commit1.cns file does not exist！");
                 return;
             }
             try
             {
                 string stcommonContent = File.ReadAllText(stcommonPath);
-                string msg = String.Format("公共common1.cns文件不适合{0}屏，是否要转换？", isWideScreen ? "宽" : "普");
+                string msg = string.Format("Public common1.cns file is not suitable for {0} screen, is it necessary to convert？", isWideScreen ? "wide" : "normal");
                 if (isWideScreen)
                 {
                     if (Character.IsStcommonWideScreen(stcommonContent) == 0)
                     {
-                        if (MessageBox.Show(msg, "操作确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (MessageBox.Show(msg, "Operation confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             Character.StcommonConvertToWideScreen(stcommonPath);
                         }
@@ -654,7 +648,7 @@ namespace MUGENCharsSet
                 {
                     if (Character.IsStcommonWideScreen(stcommonContent) == 1)
                     {
-                        if (MessageBox.Show(msg, "操作确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (MessageBox.Show(msg, "Operation confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             Character.StcommonConvertToNormalScreen(stcommonPath);
                         }
@@ -682,12 +676,12 @@ namespace MUGENCharsSet
                 }
                 if (total > 0)
                 {
-                    ShowSuccessMsg(String.Format("共{0}条项目转换成功！", total));
+                    ShowSuccessMsg(string.Format("Total {0} Succession！", total));
                 }
                 else
                 {
                     fswCharacterCns.EnableRaisingEvents = true;
-                    ShowErrorMsg("转换失败！");
+                    ShowErrorMsg("Conversion failure！");
                     return;
                 }
             }
@@ -711,7 +705,7 @@ namespace MUGENCharsSet
                     ShowErrorMsg(ex.Message);
                     return;
                 }
-                ShowSuccessMsg("转换成功！");
+                ShowSuccessMsg("Successful conversion！");
             }
             int[] selectedIndices = new int[lstCharacterList.SelectedIndices.Count];
             lstCharacterList.SelectedIndices.CopyTo(selectedIndices, 0);
@@ -730,9 +724,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 为不同的MUGEN程序版本设置相应的控件
+        /// Set the corresponding control for different MUGEN programs
         /// </summary>
-        /// <param name="version">MUGEN程序版本</param>
+        /// <param name="version">Mugen program version</param>
         private void SetMugenVersionForControls(MugenSetting.MugenVersion version)
         {
             if (version == MugenSetting.MugenVersion.WIN)
@@ -755,10 +749,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 创建一个带有进度条的<see cref="Panel"/>类实例，并添加到父容器内
-        /// </summary>
-        /// <param name="parent">父容器</param>
-        /// <returns>新<see cref="Panel"/>类实例</returns>
+        /// Create a <see cref = "panel" /> class instance with progress bar and add it to the parent container
+        /// </ summary>
+        /// <param name = "parent"> Parental container </ param>
+        /// <returns> New <SEE CREF = "Panel" /> class instance </ returns>
         private Panel ShowProgressPanel(Control parent)
         {
             Panel panel = new Panel();
@@ -775,10 +769,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 通过压缩包添加人物
-        /// </summary>
-        /// <param name="archivePathList">压缩包绝对路径列表</param>
-        /// <returns>添加人物总数</returns>
+        /// Add a character by a compressed package
+        /// </ summary>
+        /// <param name = "Archive path list"> Compressed package absolute path list </ param>
+        /// <returns> Add a total number of characters </ returns>
         private int AddCharacterByArchive(string[] archivePathList)
         {
             Panel pnlProgress = ShowProgressPanel(this);
@@ -835,9 +829,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 通过def文件添加人物
-        /// </summary>
-        /// <param name="defPathList">def文件绝对路径列表</param>
+        /// Add a character by DEF file
+        /// </ summary>
+        /// <param name = "def path list"> DEF file absolute path list </ param>
         private void AddCharacterByDef(string[] defPathList)
         {
             lstCharacterList.ClearSelected();
@@ -883,18 +877,18 @@ namespace MUGENCharsSet
             lstCharacterList_SelectedIndexChanged(null, null);
         }
 
-        #endregion
+        #endregion Class method
 
-        #region 类事件
+        #region Class event
 
         /// <summary>
-        /// 当窗口加载时发生
+        /// When the window is loaded
         /// </summary>
         private void MainForm_Load(object sender, EventArgs e)
         {
             ReadConfig();
             string mugenCfgPath = AppConfig.MugenExePath.GetDirPathOfFile() + MugenSetting.DataDir + MugenSetting.MugenCfgFileName;
-            if (AppConfig.MugenExePath == String.Empty || !File.Exists(AppConfig.MugenExePath) || !File.Exists(mugenCfgPath))
+            if (AppConfig.MugenExePath == string.Empty || !File.Exists(AppConfig.MugenExePath) || !File.Exists(mugenCfgPath))
             {
                 Visible = false;
                 StartUpForm startUpForm = new StartUpForm();
@@ -922,7 +916,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当窗口将要关闭时发生
+        /// When the window will be turned off
         /// </summary>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -930,7 +924,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当人物属性标签页获得焦点时发生
+        /// When the character attribute tag page gets the focus
         /// </summary>
         private void pageCharacter_Enter(object sender, EventArgs e)
         {
@@ -938,7 +932,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击刷新人物列表按钮时发生
+        /// When you click the Refreshing Character list button
         /// </summary>
         private void btnRefreshCharacterList_Click(object sender, EventArgs e)
         {
@@ -946,7 +940,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击修改人物设置按钮时发生
+        /// When you click Modify the Character Set button
         /// </summary>
         private void btnModify_Click(object sender, EventArgs e)
         {
@@ -962,7 +956,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击重置人物设置按钮时发生
+        /// When a reset person setting button is clicked
         /// </summary>
         private void btnReset_Click(object sender, EventArgs e)
         {
@@ -978,7 +972,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击备份人物设置按钮时发生
+        /// When a backup character setting button is clicked
         /// </summary>
         private void btnBackup_Click(object sender, EventArgs e)
         {
@@ -990,11 +984,11 @@ namespace MUGENCharsSet
                 int total = Character.MultiBackup(characterList);
                 if (total > 0)
                 {
-                    ShowSuccessMsg(String.Format("共{0}条项目备份成功！", total));
+                    ShowSuccessMsg(string.Format("Total {0} Successful project backup！", total));
                 }
                 else
                 {
-                    ShowErrorMsg("备份失败！");
+                    ShowErrorMsg("Backup failed！");
                     return;
                 }
             }
@@ -1010,13 +1004,13 @@ namespace MUGENCharsSet
                     ShowErrorMsg(ex.Message);
                     return;
                 }
-                ShowSuccessMsg("备份成功！");
+                ShowSuccessMsg("Successful backup！");
             }
             btnRestore.Enabled = true;
         }
 
         /// <summary>
-        /// 当单击恢复人物设置按钮时发生
+        /// When you click the recovery person setting button
         /// </summary>
         private void btnRestore_Click(object sender, EventArgs e)
         {
@@ -1029,12 +1023,12 @@ namespace MUGENCharsSet
                 int total = Character.MultiRestore(characterList);
                 if (total > 0)
                 {
-                    ShowSuccessMsg(String.Format("共{0}条项目还原成功！", total));
+                    ShowSuccessMsg(string.Format("Total {0} Project Restore success！", total));
                     MultiReadCharacter();
                 }
                 else
                 {
-                    ShowErrorMsg("还原失败！");
+                    ShowErrorMsg("Restore failure！");
                 }
             }
             else
@@ -1052,18 +1046,18 @@ namespace MUGENCharsSet
                     return;
                 }
                 ReadCharacter();
-                ShowSuccessMsg("恢复成功！");
+                ShowSuccessMsg("Recover success！");
             }
             fswCharacterCns.EnableRaisingEvents = true;
         }
 
         /// <summary>
-        /// 当人物列表控件选择项改变时发生
+        /// When the characters list control selection changes
         /// </summary>
         private void lstCharacterList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (CharacterListControlPreparing) return;
-            lblCharacterSelectCount.Text = String.Format("已选{0}项", lstCharacterList.SelectedItems.Count);
+            lblCharacterSelectCount.Text = string.Format("Selected {0} item", lstCharacterList.SelectedItems.Count);
             if (lstCharacterList.SelectedItems.Count > 1)
             {
                 MultiReadCharacter();
@@ -1075,7 +1069,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当点击色表单元格时自动显示下拉框
+        /// Automatically display the drop-down frame when you click the color table cell.
         /// </summary>
         private void dgvPal_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
@@ -1087,7 +1081,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当自动选择属性改变时发生
+        /// When the automatic selection of attribute changes
         /// </summary>
         private void chkAutoSort_CheckedChanged(object sender, EventArgs e)
         {
@@ -1095,7 +1089,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击全选按钮时发生
+        /// What happens when you click a full-selection button?
         /// </summary>
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
@@ -1110,7 +1104,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击反选按钮时发生
+        /// What happens when you click the Reflect button?
         /// </summary>
         private void btnSelectInvert_Click(object sender, EventArgs e)
         {
@@ -1140,7 +1134,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击向上搜索按钮时发生
+        /// What happens when you click the search button
         /// </summary>
         private void btnSearchUp_Click(object sender, EventArgs e)
         {
@@ -1148,7 +1142,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击向下搜索按钮时发生
+        /// What happens when you click a button?
         /// </summary>
         private void btnSearchDown_Click(object sender, EventArgs e)
         {
@@ -1156,7 +1150,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击全部搜索按钮时发生
+        /// When you click on the full search button
         /// </summary>
         private void btnSearchAll_Click(object sender, EventArgs e)
         {
@@ -1164,7 +1158,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当搜索文本框控件按下某个键时发生
+        /// When searching for text box control Press a key
         /// </summary>
         private void txtKeyword_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1175,7 +1169,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当窗体控件按下某个键时发生
+        /// When the form control presses a key
         /// </summary>
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1189,18 +1183,21 @@ namespace MUGENCharsSet
                             if (btnModify.Enabled) btnModify_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.S:
                         if (e.Control)
                         {
                             if (btnReset.Enabled) btnReset_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.B:
                         if (e.Control)
                         {
                             if (btnBackup.Enabled) btnBackup_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.R:
                         if (e.Control)
                         {
@@ -1219,18 +1216,21 @@ namespace MUGENCharsSet
                             if (btnMugenCfgModify.Enabled) btnMugenCfgModify_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.S:
                         if (e.Control)
                         {
                             if (btnMugenCfgReset.Enabled) btnMugenCfgReset_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.B:
                         if (e.Control)
                         {
                             if (btnMugenCfgBackup.Enabled) btnMugenCfgBackup_Click(null, null);
                         }
                         break;
+
                     case (int)Keys.R:
                         if (e.Control)
                         {
@@ -1242,7 +1242,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当人物属性文本框控件按下某个键时发生
+        /// When the character's property text box control presses a key
         /// </summary>
         private void textProperty_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1253,7 +1253,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当读取人物列表类型控件选择项改变时发生
+        /// When reading the character list type control selection changes
         /// </summary>
         private void cboReadCharacterType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1261,7 +1261,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当人物文件夹下的cns文件改变时发生
+        /// When the CNS file under the character folder changes
         /// </summary>
         private void fswCharacterCns_Changed(object sender, FileSystemEventArgs e)
         {
@@ -1276,7 +1276,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当人物def文件拖拽到人物属性标签页时发生
+        /// When the character DEF file drags and drops to the character attribute tab
         /// </summary>
         private void pageCharacter_DragDrop(object sender, DragEventArgs e)
         {
@@ -1289,7 +1289,7 @@ namespace MUGENCharsSet
             {
                 if (AddCharacterByArchive(pathList) == 0)
                 {
-                    ShowErrorMsg("添加人物压缩包失败！");
+                    ShowErrorMsg("Adding a character compressed package failed！");
                 }
             }
         }
@@ -1300,7 +1300,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当可用act文件列表下拉框选择项改变时发生
+        /// When the list of the ACT file list is removed, the selection is changed.
         /// </summary>
         private void cboSelectableActFileList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1317,12 +1317,12 @@ namespace MUGENCharsSet
             }
         }
 
-        #endregion
+        #endregion Class event
 
-        #region 人物列表右键菜单
+        #region Character list Right-click menu
 
         /// <summary>
-        /// 当单击打开def文件右键菜单项时发生
+        /// When you click Open the DEF file right key menu item
         /// </summary>
         private void ctxTsmiOpenDefFile_Click(object sender, EventArgs e)
         {
@@ -1331,7 +1331,7 @@ namespace MUGENCharsSet
             lstCharacterList.SelectedItems.CopyTo(characterList, 0);
             if (characterList.Length > 1)
             {
-                if (MessageBox.Show("是否要打开多个文件？", "操作确认", MessageBoxButtons.YesNo,
+                if (MessageBox.Show("Do you want to open multiple files?？", "Operation confirmation", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question) != DialogResult.Yes) return;
             }
             foreach (Character character in characterList)
@@ -1344,7 +1344,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("人物def文件不存在！");
+                        ShowErrorMsg("Character def file does not exist！");
                         return;
                     }
                 }
@@ -1360,7 +1360,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("未找到文本编辑器！");
+                        ShowErrorMsg("Did you find a text editor！");
                         return;
                     }
                 }
@@ -1368,7 +1368,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击打开cns文件右键菜单项时发生
+        /// When you click Open the CNS file right key menu item
         /// </summary>
         private void ctxTsmiOpenCnsFile_Click(object sender, EventArgs e)
         {
@@ -1377,7 +1377,7 @@ namespace MUGENCharsSet
             lstCharacterList.SelectedItems.CopyTo(characterList, 0);
             if (characterList.Length > 1)
             {
-                if (MessageBox.Show("是否要打开多个文件？", "操作确认", MessageBoxButtons.YesNo,
+                if (MessageBox.Show("Do you want to open multiple files?？", "Operation confirmation", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question) != DialogResult.Yes) return;
             }
             foreach (Character character in characterList)
@@ -1390,7 +1390,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("人物cns文件不存在！");
+                        ShowErrorMsg("People CNS files do not exist！");
                         return;
                     }
                 }
@@ -1406,7 +1406,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("未找到文本编辑器！");
+                        ShowErrorMsg("Did you find a text editor！");
                         return;
                     }
                 }
@@ -1414,7 +1414,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击打开文件夹右键菜单项时发生
+        /// When you click Open a folder right-click menu item?
         /// </summary>
         private void ctxTsmiOpenDefDir_Click(object sender, EventArgs e)
         {
@@ -1423,7 +1423,7 @@ namespace MUGENCharsSet
             lstCharacterList.SelectedItems.CopyTo(characterList, 0);
             if (characterList.Length > 1)
             {
-                if (MessageBox.Show("是否要打开多个文件夹？", "操作确认", MessageBoxButtons.YesNo,
+                if (MessageBox.Show("Do you want to open multiple folders?？", "Operation confirmation", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question) != DialogResult.Yes) return;
             }
             foreach (Character character in characterList)
@@ -1436,7 +1436,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("人物def文件不存在！");
+                        ShowErrorMsg("Character def file does not exist！");
                         return;
                     }
                 }
@@ -1452,7 +1452,7 @@ namespace MUGENCharsSet
                     }
                     else
                     {
-                        ShowErrorMsg("打开文件夹失败！");
+                        ShowErrorMsg("Open a folder failed！");
                         return;
                     }
                 }
@@ -1460,7 +1460,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击复制def文件路径右键菜单项时发生
+        /// When you click Copy the DEF file path right, the key metrop will occur.
         /// </summary>
         private void ctxTsmiCopyDefPath_Click(object sender, EventArgs e)
         {
@@ -1480,14 +1480,14 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                ShowErrorMsg("复制失败！");
+                ShowErrorMsg("Copy failure！");
                 return;
             }
-            ShowSuccessMsg(String.Format("{0}条项目已复制到剪贴板！", lstCharacterList.SelectedItems.Count));
+            ShowSuccessMsg(string.Format("{0}Article project has been copied to a clipboard！", lstCharacterList.SelectedItems.Count));
         }
 
         /// <summary>
-        /// 当单击添加所选人物右键菜单项时发生
+        /// When you click Add Sytermall, right-click mesh item
         /// </summary>
         private void ctxTsmiAddCharacter_Click(object sender, EventArgs e)
         {
@@ -1514,12 +1514,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击删除所选人物右键菜单项时发生
+        /// When you click Delete Syareder Right-click Menu item?
         /// </summary>
         private void ctxTsmiDeleteCharacter_Click(object sender, EventArgs e)
         {
             if (lstCharacterList.SelectedItems.Count == 0) return;
-            if (MessageBox.Show("是否删除人物？", "操作确认", MessageBoxButtons.YesNo,
+            if (MessageBox.Show("Whether to delete the characters？", "Operation confirmation", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) != DialogResult.Yes) return;
             if (MultiModified)
             {
@@ -1528,7 +1528,7 @@ namespace MUGENCharsSet
                 int total = Character.MultiDelete(characterList);
                 if (total == 0)
                 {
-                    ShowErrorMsg("删除失败！");
+                    ShowErrorMsg("failed to delete！");
                     return;
                 }
                 foreach (Character character in characterList)
@@ -1560,7 +1560,7 @@ namespace MUGENCharsSet
             {
                 lstCharacterList.SelectedIndex = lstCharacterList.Items.Count - 1;
             }
-            lblCharacterCount.Text = String.Format("共{0}项", lstCharacterList.Items.Count);
+            lblCharacterCount.Text = string.Format("Total {0} item", lstCharacterList.Items.Count);
             if (lstCharacterList.Items.Count == 0)
             {
                 lblCharacterSelectCount.Text = "";
@@ -1569,7 +1569,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击转换为宽屏人物包右键菜单项时发生
+        /// When you click Convert to Widescreen Character Pack Right-click on the menu item
         /// </summary>
         private void ctxTsmiConvertToWideScreen_Click(object sender, EventArgs e)
         {
@@ -1577,19 +1577,19 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击转换为普屏人物包右键菜单项时发生
+        /// When you click Convert to the Push-block character, right-click menu item
         /// </summary>
         private void ctxTsmiConvertToNormalScreen_Click(object sender, EventArgs e)
         {
             ConvertToFitScreen(false);
         }
 
-        #endregion
+        #endregion Character list Right-click menu
 
         #region 主菜单
 
         /// <summary>
-        /// 当单击添加人物压缩包菜单项时发生
+        /// When you click Add a character to compress the package menu item
         /// </summary>
         private void tsmiAddCharacterByDefOrArchive_Click(object sender, EventArgs e)
         {
@@ -1599,7 +1599,7 @@ namespace MUGENCharsSet
                 {
                     if (AddCharacterByArchive(ofdAddCharacterPath.FileNames) == 0)
                     {
-                        ShowErrorMsg("添加人物压缩包失败！");
+                        ShowErrorMsg("Adding a character compressed package failed！");
                         return;
                     }
                 }
@@ -1612,7 +1612,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击更换system.def文件菜单项时发生
+        /// When you click Replace the System.DEF file menu item,
         /// </summary>
         private void tsmiChangeSystemDefPath_Click(object sender, EventArgs e)
         {
@@ -1639,7 +1639,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击更换select.def文件菜单项时发生
+        /// When you click Replace the Select.DEF file menu item,
         /// </summary>
         private void tsmiChangeSelectDefPath_Click(object sender, EventArgs e)
         {
@@ -1666,7 +1666,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击更换fight.def文件菜单项时发生
+        /// When you click Replace the Fight.DEF file menu item,
         /// </summary>
         private void tsmiChangeFightDefPath_Click(object sender, EventArgs e)
         {
@@ -1689,11 +1689,11 @@ namespace MUGENCharsSet
                 ShowErrorMsg(ex.Message);
                 return;
             }
-            ShowSuccessMsg("fight.def文件更换成功！");
+            ShowSuccessMsg("Fight.def file replacement success！");
         }
 
         /// <summary>
-        /// 当单击重新载入菜单项时发生
+        /// What happened when you click reload menu item?
         /// </summary>
         private void tsmiReload_Click(object sender, EventArgs e)
         {
@@ -1702,7 +1702,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击运行MUGEN程序菜单项时发生
+        /// When you click Run Mugen Program Menu items
         /// </summary>
         private void tsmiLaunchMugenExe_Click(object sender, EventArgs e)
         {
@@ -1717,18 +1717,18 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    ShowErrorMsg("运行MUGEN程序失败！");
+                    ShowErrorMsg("Run the Mugen program failed！");
                     return;
                 }
             }
             else
             {
-                ShowErrorMsg("MUGEN程序不存在！");
+                ShowErrorMsg("Mugen program does not exist！");
             }
         }
 
         /// <summary>
-        /// 当单击设置菜单项时发生
+        /// When you click Settings menu items
         /// </summary>
         private void tsmiSetting_Click(object sender, EventArgs e)
         {
@@ -1738,7 +1738,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击打开select.def菜单项时发生
+        /// When you click Open Select.DEF menu item?
         /// </summary>
         private void tsmiOpenSelectDef_Click(object sender, EventArgs e)
         {
@@ -1750,18 +1750,18 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    ShowErrorMsg("未找到文本编辑器！");
+                    ShowErrorMsg("Did you find a text editor！");
                     return;
                 }
             }
             else
             {
-                ShowErrorMsg("select.def文件不存在！");
+                ShowErrorMsg("select.def file does not exist！");
             }
         }
 
         /// <summary>
-        /// 当单击打开system.def菜单项时发生
+        /// When you click Open the System.def menu item
         /// </summary>
         private void tsmiOpenSystemDef_Click(object sender, EventArgs e)
         {
@@ -1773,18 +1773,18 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    ShowErrorMsg("未找到文本编辑器！");
+                    ShowErrorMsg("Did you find a text editor！");
                     return;
                 }
             }
             else
             {
-                ShowErrorMsg("system.def文件不存在！");
+                ShowErrorMsg("System.def file does not exist！");
             }
         }
 
         /// <summary>
-        /// 当单击打开mugen.cfg菜单项时发生
+        /// When you click Open Mugen.cfg menu item?
         /// </summary>
         private void tsmiOpenMugenCfg_Click(object sender, EventArgs e)
         {
@@ -1796,18 +1796,18 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    ShowErrorMsg("未找到文本编辑器！");
+                    ShowErrorMsg("Did you find a text editor！");
                     return;
                 }
             }
             else
             {
-                ShowErrorMsg("mugen.cfg文件不存在！");
+                ShowErrorMsg("Mugen.cfg file does not exist！");
             }
         }
 
         /// <summary>
-        /// 当单击关于菜单项时发生
+        /// When you click on the menu item
         /// </summary>
         private void tsmiAbout_Click(object sender, EventArgs e)
         {
@@ -1815,14 +1815,14 @@ namespace MUGENCharsSet
             aboutForm.ShowDialog();
         }
 
-        #endregion
+        #endregion 主菜单
 
-        #region 主程序配置标签页
+        #region Main program configuration tab
 
         private bool _mugenCfgModifyEnabled = false;
 
         /// <summary>
-        /// 获取或设置主程序配置标签页是否进入修改模式
+        /// Get or set up the main program configuration tab to enter modification mode
         /// </summary>
         private bool MugenCfgModifyEnabled
         {
@@ -1849,7 +1849,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 重置主程序配置标签页上的各个控件
+        /// Reset the respective controls on the main program configuration tab
         /// </summary>
         private void ResetMugenCfgControls()
         {
@@ -1875,7 +1875,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取mugen.cfg文件配置
+        /// Read Mugen.cfg file configuration
         /// </summary>
         public void ReadMugenCfgSetting()
         {
@@ -1955,7 +1955,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取主程序配置标签页上控件的值
+        /// Read the value of the control on the main program configuration tab
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         private void ReadMugenCfgControlsValue()
@@ -1971,17 +1971,17 @@ namespace MUGENCharsSet
                         {
                             if (control is TextBox)
                             {
-                                if (((TextBox)control).Text.Trim() == String.Empty) throw new ApplicationException("字段不得为空！");
+                                if (((TextBox)control).Text.Trim() == string.Empty) throw new ApplicationException("Fields must not be empty！");
                             }
                             else if (control is ComboBox)
                             {
                                 if (((ComboBox)control).DropDownStyle == ComboBoxStyle.DropDownList)
                                 {
-                                    if (((ComboBox)control).SelectedIndex == -1) throw new ApplicationException("必须选择一项！");
+                                    if (((ComboBox)control).SelectedIndex == -1) throw new ApplicationException("Must choose one！");
                                 }
                                 else
                                 {
-                                    if (((ComboBox)control).Text.Trim() == String.Empty) throw new ApplicationException("字段不得为空！");
+                                    if (((ComboBox)control).Text.Trim() == string.Empty) throw new ApplicationException("Fields must not be empty！");
                                 }
                             }
                             if (control == trbDifficulty) MugenSetting.Difficulty = trbDifficulty.Value;
@@ -2022,13 +2022,13 @@ namespace MUGENCharsSet
                         {
                             if (control is TextBox) ((TextBox)control).SelectAll();
                             control.Focus();
-                            throw new ApplicationException("数值格式错误！");
+                            throw new ApplicationException("Numerical format error！");
                         }
                         catch (OverflowException)
                         {
                             if (control is TextBox) ((TextBox)control).SelectAll();
                             control.Focus();
-                            throw new ApplicationException("数值超过范围！");
+                            throw new ApplicationException("Numerical value！");
                         }
                         catch (ApplicationException ex)
                         {
@@ -2042,7 +2042,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 初始化按键设置下拉列表
+        /// Initialization button Set drop-down list
         /// </summary>
         private void KeyPressComboBoxInit()
         {
@@ -2057,7 +2057,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当主程序配置标签页获得焦点时发生
+        /// When the main program configuration tab gets the focus
         /// </summary>
         private void pageMugenCfgSetting_Enter(object sender, EventArgs e)
         {
@@ -2069,7 +2069,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击主程序配置标签页的修改按钮时发生
+        /// When the modification button of the master program configuration tab is clicked
         /// </summary>
         private void btnMugenCfgModify_Click(object sender, EventArgs e)
         {
@@ -2088,11 +2088,11 @@ namespace MUGENCharsSet
                 ShowErrorMsg(ex.Message);
                 return;
             }
-            ShowSuccessMsg("设置修改成功！");
+            ShowSuccessMsg("Set the modification success！");
         }
 
         /// <summary>
-        /// 当单击主程序配置标签页的重置按钮时发生
+        /// When a reset button is clicked in the master program
         /// </summary>
         private void btnMugenCfgReset_Click(object sender, EventArgs e)
         {
@@ -2100,7 +2100,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当单击主程序配置标签页的备份按钮时发生
+        /// When a backup button is clicked in the primary program configuration tab
         /// </summary>
         private void btnMugenCfgBackup_Click(object sender, EventArgs e)
         {
@@ -2114,11 +2114,11 @@ namespace MUGENCharsSet
                 return;
             }
             btnMugenCfgRestore.Enabled = true;
-            ShowSuccessMsg("设置备份成功！");
+            ShowSuccessMsg("Set backup success！");
         }
 
         /// <summary>
-        /// 当单击主程序配置标签页的还原按钮时发生
+        /// When a restore button is clicked in the master program configuration tab
         /// </summary>
         private void btnMugenCfgRestore_Click(object sender, EventArgs e)
         {
@@ -2132,11 +2132,11 @@ namespace MUGENCharsSet
                 return;
             }
             ReadMugenCfgSetting();
-            ShowSuccessMsg("设置还原成功！");
+            ShowSuccessMsg("Set the restore success！");
         }
 
         /// <summary>
-        /// 当Difficulty滑动条的值改变时发生
+        /// When the value of the Difficulty slider changes
         /// </summary>
         private void trbDifficulty_ValueChanged(object sender, EventArgs e)
         {
@@ -2144,14 +2144,13 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当GameSpeed滑动条的值改变时发生
+        /// When the value of the Game Speed ​​slider changes
         /// </summary>
         private void trbGameSpeed_ValueChanged(object sender, EventArgs e)
         {
             lblGameSpeedValue.Text = (trbGameSpeed.Value > 0 ? "+" : "") + trbGameSpeed.Value;
         }
 
-        #endregion
-
+        #endregion Main program configuration tab
     }
 }

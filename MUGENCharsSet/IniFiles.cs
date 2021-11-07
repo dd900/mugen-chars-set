@@ -1,30 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// INI配置类
+    /// INI configuration class
     /// </summary>
     public class IniFiles
     {
-        /// <summary>注释分隔符</summary>
+        /// <summary>Comment separator</summary>
         public const string CommentMark = ";";
+
         private readonly string _filePath;
 
-        // 声明读写INI文件的API函数
+        // Declare API functions for reading and writing INI files
         [DllImport("kernel32")]
         private static extern bool WritePrivateProfileString(string section, string key, byte[] val, string filePath);
+
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, byte[] retVal, int size, string filePath);
 
         /// <summary>
-        /// 获取配置文件绝对路径
+        /// Obtain the absolute path of the configuration file
         /// </summary>
         public string FilePath
         {
@@ -32,27 +32,27 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定文件路径创建<see cref="IniFiles"/>类新实例
+        /// Create a new instance of the <see cref="IniFiles"/> class according to the specified file path
         /// </summary>
-        /// <param name="fileName">ini文件路径</param>
+        /// <param name="fileName">ini file path</param>
         /// <exception cref="System.ApplicationException"></exception>
         public IniFiles(string fileName)
         {
-            // 判断文件是否存在
+            // Determine whether the file exists
             FileInfo fileInfo = new FileInfo(fileName);
-            //Todo:搞清枚举的用法
+            //Todo:Figure out the usage of enumeration
             if (!fileInfo.Exists)
             {
                 StreamWriter sw = null;
                 try
                 {
-                    //文件不存在，建立文件
+                    //File does not exist, create file
                     sw = new StreamWriter(fileName, false, Encoding.Default);
                     sw.Write("\r\n");
                 }
                 catch
                 {
-                    throw new ApplicationException("配置文件不存在！");
+                    throw new ApplicationException("The configuration file does not exist！");
                 }
                 finally
                 {
@@ -63,35 +63,35 @@ namespace MUGENCharsSet
             {
                 Tools.IniFileStandardization(fileInfo.FullName);
             }
-            //必须是完全路径，不能是相对路径
+            //Must be a full path, not a relative path
             _filePath = fileInfo.FullName;
         }
 
         /// <summary>
-        /// 写入指定的配置项
+        /// Write the specified configuration item
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Value">配置值</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Value">Configuration value</param>
         /// <exception cref="System.ApplicationException"></exception>
         public void WriteString(string Section, string Ident, string Value)
         {
             if (!WritePrivateProfileString(Section, Ident, Encoding.UTF8.GetBytes(" " + Value.TrimStart()), FilePath))
             {
-                throw new ApplicationException("配置文件写入失败！");
+                throw new ApplicationException("Failed to write configuration file！");
             }
         }
 
         /// <summary>
-        /// 读取指定的配置项
+        /// Read the specified configuration item
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Default">默认值</param>
-        /// <returns>配置值</returns>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Default">default value</param>
+        /// <returns>Configuration value</returns>
         public string ReadString(string Section, string Ident, string Default)
         {
-            Byte[] Buffer = new Byte[65535];
+            byte[] Buffer = new byte[65535];
             int bufLen = GetPrivateProfileString(Section, Ident, Default, Buffer, Buffer.GetUpperBound(0), FilePath);
             string s = Encoding.UTF8.GetString(Buffer);
             s = s.Substring(0, bufLen);
@@ -103,19 +103,18 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取指定的配置项(整数)
+        /// Read the specified configuration item (integer)
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Default">默认值</param>
-        /// <returns>配置值</returns>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Default">default value</param>
+        /// <returns>Configuration value</returns>
         public int ReadInteger(string Section, string Ident, int Default)
         {
             string intStr = ReadString(Section, Ident, Convert.ToString(Default));
             try
             {
                 return Convert.ToInt32(intStr);
-
             }
             catch (Exception ex)
             {
@@ -125,23 +124,23 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 写入指定的配置项(整数)
+        /// Write the specified configuration item (integer)
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Value">配置值</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Value">Configuration value</param>
         public void WriteInteger(string Section, string Ident, int Value)
         {
             WriteString(Section, Ident, Value.ToString());
         }
 
         /// <summary>
-        /// 读取指定的配置项(布尔值)
+        /// Read the specified configuration item (Boolean value)
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Default">默认值</param>
-        /// <returns>配置值</returns>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Default">default value</param>
+        /// <returns>Configuration value</returns>
         public bool ReadBool(string Section, string Ident, bool Default)
         {
             try
@@ -156,39 +155,39 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 写入指定的配置项(布尔值)
+        /// Write the specified configuration item (Boolean value)
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <param name="Value">配置值</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <param name="Value">Configuration value</param>
         public void WriteBool(string Section, string Ident, bool Value)
         {
             WriteString(Section, Ident, Convert.ToString(Value));
         }
 
         /// <summary>
-        /// 读取指定的配置分段中的所有项
+        /// Read all items in the specified configuration segment
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Idents">配置值列表</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Idents">Configuration value list</param>
         public void ReadSection(string Section, StringCollection Idents)
         {
-            Byte[] Buffer = new Byte[16384];
+            byte[] Buffer = new byte[16384];
             //Idents.Clear();
 
             int bufLen = GetPrivateProfileString(Section, null, null, Buffer, Buffer.GetUpperBound(0),
              FilePath);
-            //对Section进行解析
+            //Analyze Section
             GetStringsFromBuffer(Buffer, bufLen, Idents);
         }
 
         /// <summary>
-        /// 从Buffer中获取字符串列表
+        /// Get a list of strings from the Buffer
         /// </summary>
         /// <param name="Buffer">Buffer</param>
-        /// <param name="bufLen">Buffer长度</param>
-        /// <param name="Strings">字符串列表</param>
-        private void GetStringsFromBuffer(Byte[] Buffer, int bufLen, StringCollection Strings)
+        /// <param name="bufLen">Buffer length</param>
+        /// <param name="Strings">list of strings</param>
+        private void GetStringsFromBuffer(byte[] Buffer, int bufLen, StringCollection Strings)
         {
             Strings.Clear();
             if (bufLen != 0)
@@ -207,24 +206,23 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取所有的配置分段名称
+        /// Read all configuration segment names
         /// </summary>
-        /// <param name="SectionList">配置分段名称列表</param>
+        /// <param name="SectionList">Configuration section name list</param>
         public void ReadSections(StringCollection SectionList)
         {
-            //Note:必须得用Bytes来实现，StringBuilder只能取到第一个Section
+            //Note: It must be implemented with Bytes, StringBuilder can only get the first Section
             byte[] Buffer = new byte[65535];
             int bufLen = 0;
             bufLen = GetPrivateProfileString(null, null, null, Buffer, Buffer.GetUpperBound(0), FilePath);
             GetStringsFromBuffer(Buffer, bufLen, SectionList);
         }
 
-
         /// <summary>
-        /// 读取指定的配置分段中的所有项的键值对
+        /// Read the key-value pairs of all items in the specified configuration segment
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Values">配置项的键值对</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Values">key-value pairs of configuration items</param>
         public void ReadSectionValues(string Section, NameValueCollection Values)
         {
             StringCollection KeyList = new StringCollection();
@@ -233,11 +231,10 @@ namespace MUGENCharsSet
             foreach (string key in KeyList)
             {
                 Values.Add(key, ReadString(Section, key, ""));
-
             }
         }
 
-        ////读取指定的Section的所有Value到列表中，
+        ////Read all Values ​​of the specified Section to the list,
         //public void ReadSectionValues(string Section, NameValueCollection Values,char splitString)
         //{　 string sectionValue;
         //　　string[] sectionValueSplit;
@@ -254,32 +251,32 @@ namespace MUGENCharsSet
         //}
 
         /// <summary>
-        /// 删除指定的配置分段
+        /// Delete the specified configuration segment
         /// </summary>
-        /// <param name="Section">配置分段</param>
+        /// <param name="Section">Configure segmentation</param>
         /// <exception cref="System.ApplicationException"></exception>
         public void EraseSection(string Section)
         {
             if (!WritePrivateProfileString(Section, null, null, FilePath))
             {
-                throw new ApplicationException("无法清除配置文件中的Section！");
+                throw new ApplicationException("Unable to clear Section in the configuration file！");
             }
         }
 
         /// <summary>
-        /// 删除指定的配置项
+        /// Delete the specified configuration item
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
         public void DeleteKey(string Section, string Ident)
         {
             WritePrivateProfileString(Section, Ident, null, FilePath);
         }
 
         /// <summary>
-        /// 对于Win9X，来说需要实现UpdateFile方法将缓冲中的数据写入文件。
-        /// 在Win NT, 2000和XP上，都是直接写文件，没有缓冲，所以，无须实现UpdateFile。
-        /// 执行完对Ini文件的修改之后，应该调用本方法更新缓冲区。
+        /// For Win9X, it is necessary to implement the UpdateFile method to write the data in the buffer to the file.
+        /// On Win NT, 2000 and XP, files are written directly without buffering, so there is no need to implement UpdateFile.
+        /// After executing the modification to the Ini file, you should call this method to update the buffer.
         /// </summary>
         public void UpdateFile()
         {
@@ -287,11 +284,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 检查指定配置项是否存在
+        /// Check if the specified configuration item exists
         /// </summary>
-        /// <param name="Section">配置分段</param>
-        /// <param name="Ident">配置项</param>
-        /// <returns>是否存在</returns>
+        /// <param name="Section">Configure segmentation</param>
+        /// <param name="Ident">Configuration items</param>
+        /// <returns>Does it exist?</returns>
         public bool ValueExists(string Section, string Ident)
         {
             //
@@ -300,7 +297,7 @@ namespace MUGENCharsSet
             return Idents.IndexOf(Ident) > -1;
         }
 
-        //确保资源的释放
+        //Ensure the release of resources
         ~IniFiles()
         {
             UpdateFile();

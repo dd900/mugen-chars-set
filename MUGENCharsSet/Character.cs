@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using SharpCompress.Common;
+using SharpCompress.Reader;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -7,72 +8,90 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using SharpCompress.Common;
-using SharpCompress.Reader;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// MUGEN人物类
+    /// MUGEN character class
     /// </summary>
     public class Character : IComparable<Character>
     {
-        #region 类常量
+        #region Class Constant
 
-        /// <summary>def文件扩展名</summary>
+        /// <summary>def file extension</summary>
         public const string DefExt = ".def";
-        /// <summary>备份文件扩展名</summary>
+
+        /// <summary>Backup file extension</summary>
         public const string BakExt = ".bak";
-        /// <summary>已删除人物文件扩展名</summary>
+
+        /// <summary>Deleted character file extension</summary>
         public const string DelExt = ".del";
-        /// <summary>act文件扩展名</summary>
+
+        /// <summary>act file extension</summary>
         public const string ActExt = ".act";
-        /// <summary>人物名界定符</summary>
+
+        /// <summary>Character name delimiter</summary>
         public const char NameDelimeter = '"';
-        /// <summary>无效人物名数组(用于过滤select.def中的人物列表)</summary>
-        public static string[] InvalidCharacterName = new string[] { String.Empty, "blank", "empty", "randomselect", "/-", "/" };
-        /// <summary>人物压缩包扩展名数组</summary>
-        public static string[] ArchiveExt = new string[] { ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2" };
+
+        /// <summary>Invalid character name array (used to filter the character list in select.def)</summary>
+        public static string[] InvalidCharacterName = new[] { string.Empty, "blank", "empty", "randomselect", "/-", "/" };
+
+        /// <summary>Character compression package extension name array</summary>
+        public static string[] ArchiveExt = new[] { ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2" };
+
         private static string[] _characterDefPathList = null;
 
         /// <summary>
-        /// 人物配置信息类
+        /// Character configuration information
         /// </summary>
         public struct SettingInfo
         {
-            /// <summary>Info配置分段</summary>
+            /// <summary>Info configuration segmentation</summary>
             public const string InfoSection = "Info";
-            /// <summary>Files配置分段</summary>
+
+            /// <summary>Files configuration segmentation</summary>
             public const string FilesSection = "Files";
-            /// <summary>Data配置分段</summary>
+
+            /// <summary>Data configuration segmentation</summary>
             public const string DataSection = "Data";
-            /// <summary>人物名配置项</summary>
+
+            /// <summary>Character name configuration item</summary>
             public const string NameItem = "name";
-            /// <summary>人物显示名配置项</summary>
+
+            /// <summary>Character display name configuration item</summary>
             public const string DisplayNameItem = "displayname";
-            /// <summary>cns相对路径配置项</summary>
+
+            /// <summary>cns relative path configuration item</summary>
             public const string CnsItem = "cns";
-            /// <summary>生命值配置项</summary>
+
+            /// <summary>Life value configuration items</summary>
             public const string LifeItem = "life";
-            /// <summary>攻击力配置项</summary>
+
+            /// <summary>Attack power configuration items</summary>
             public const string AttackItem = "attack";
-            /// <summary>防御力配置项</summary>
+
+            /// <summary>defense configuration items</summary>
             public const string DefenceItem = "defence";
-            /// <summary>气上限配置项</summary>
+
+            /// <summary>gas cap configuration item</summary>
             public const string PowerItem = "power";
-            /// <summary>pal配置项前缀名</summary>
+
+            /// <summary>Pal configuration item prefix name</summary>
             public const string PalItemPrefix = "pal";
-            /// <summary>人物localcoord配置项</summary>
+
+            /// <summary>Character localcoord configuration item</summary>
             public const string LocalcoordItem = "localcoord";
-            /// <summary>stcommon相对路径配置项</summary>
+
+            /// <summary>stcommon relative path configuration item</summary>
             public const string StcommonItem = "stcommon";
-            /// <summary>sprite相对路径配置项</summary>
+
+            /// <summary>sprite relative path configuration item</summary>
             public const string SpriteItem = "sprite";
         }
 
-        #endregion
+        #endregion Class Constant
 
-        #region 类私有成员
+        #region Class Private Member
 
         private string _defPath;
         private string _cns;
@@ -90,12 +109,12 @@ namespace MUGENCharsSet
         private SpriteFile _sprite;
         private bool _isInSelectDef;
 
-        #endregion
+        #endregion Class Private Member
 
-        #region 类属性
+        #region class attributes
 
         /// <summary>
-        /// 获取或设置def文件绝对路径
+        /// Get or set the absolute path of the def file
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public string DefPath
@@ -103,13 +122,13 @@ namespace MUGENCharsSet
             get { return _defPath; }
             private set
             {
-                if (value == String.Empty) throw new ApplicationException("def路径不得为空！");
+                if (value == string.Empty) throw new ApplicationException("The def path must not be empty!");
                 _defPath = value;
             }
         }
 
-        /// <summary>
-        /// 获取或设置cns相对路径
+        // <summary>
+        /// Get or set the relative path of cns
         /// </summary>
         public string Cns
         {
@@ -118,7 +137,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取cns绝对路径
+        /// Get the absolute path of cns
         /// </summary>
         public string CnsFullPath
         {
@@ -126,7 +145,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物名
+        /// Get or set the character name
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public string Name
@@ -134,14 +153,14 @@ namespace MUGENCharsSet
             get { return _name; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("人物名称不得为空！");
+                if (value == string.Empty) throw new ApplicationException("The character name cannot be empty!");
                 if (value == MainForm.MultiValue) return;
                 _name = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置显示名
+        /// Get or set the display name
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public string DisplayName
@@ -149,14 +168,14 @@ namespace MUGENCharsSet
             get { return _displayName; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("显示名不得为空！");
+                if (value == string.Empty) throw new ApplicationException("The display name cannot be empty!");
                 if (value == MainForm.MultiValue) return;
                 _displayName = value;
             }
         }
 
         /// <summary>
-        /// 获取在人物列表控件上显示的名称
+        /// Get the name displayed on the character list control
         /// </summary>
         public string ItemName
         {
@@ -167,23 +186,23 @@ namespace MUGENCharsSet
                 {
                     if (MugenSetting.IsWideScreen)
                     {
-                        if (!IsWideScreen) name.Append("(普)");
+                        if (!IsWideScreen) name.Append("(normal)");
                     }
                     else
                     {
-                        if (IsWideScreen) name.Append("(宽)");
+                        if (IsWideScreen) name.Append("(wide)");
                     }
                 }
                 if (!IsInSelectDef)
                 {
-                    name.Append("(未)");
+                    name.Append("(no def)");
                 }
                 return Name + " " + name.ToString();
             }
         }
 
         /// <summary>
-        /// 获取或设置生命值
+        /// Get or set health
         /// </summary>
         public int Life
         {
@@ -196,7 +215,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置攻击力
+        /// Get or set attack power
         /// </summary>
         public int Attack
         {
@@ -209,7 +228,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置防御力
+        /// Get or set defense
         /// </summary>
         public int Defence
         {
@@ -222,7 +241,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置气上限
+        /// Get or set power
         /// </summary>
         public int Power
         {
@@ -235,7 +254,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Pal相对路径键值对列表
+        /// Get or set the list of Pal relative path key-value pairs
         /// </summary>
         public Dictionary<string, string> PalList
         {
@@ -244,7 +263,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取当前所有可选的act文件相对路径列表
+        /// Get the relative path list of all current optional act files
         /// </summary>
         public string[] SelectableActFileList
         {
@@ -261,7 +280,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物包是否为宽屏
+        /// Get or set whether the character pack is widescreen
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public bool IsWideScreen
@@ -276,11 +295,11 @@ namespace MUGENCharsSet
                         IniFiles ini = new IniFiles(DefPath);
                         int width = 427;
                         int height = 240;
-                        ini.WriteString(SettingInfo.InfoSection, SettingInfo.LocalcoordItem, String.Format("{0},{1}", width, height));
+                        ini.WriteString(SettingInfo.InfoSection, SettingInfo.LocalcoordItem, string.Format("{0},{1}", width, height));
                     }
                     catch (ApplicationException)
                     {
-                        throw new ApplicationException("宽屏人物包转换失败！");
+                        throw new ApplicationException("Widescreen character pack conversion failed！");
                     }
                 }
                 else
@@ -292,7 +311,7 @@ namespace MUGENCharsSet
                     }
                     catch (ApplicationException)
                     {
-                        throw new ApplicationException("普屏人物包转换失败！");
+                        throw new ApplicationException("Failed to convert normal screen character pack！");
                     }
                 }
                 _isWideScreen = value;
@@ -300,7 +319,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置stcommon相对路径
+        /// Get or set the relative path of stcommon
         /// </summary>
         public string Stcommon
         {
@@ -309,7 +328,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物模型文件相对路径
+        /// Get or set the relative path of the character sprite file
         /// </summary>
         public string SpritePath
         {
@@ -318,7 +337,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物模型文件版本
+        /// Get or set the version of the character sprite file
         /// </summary>
         public SpriteFile.SffVerion SpriteVersion
         {
@@ -327,7 +346,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物模型
+        /// Get or set the character sprite
         /// </summary>
         public SpriteFile Sprite
         {
@@ -336,7 +355,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取人物模型图像
+        /// Get character model image
         /// </summary>
         public Bitmap SpriteImage
         {
@@ -360,7 +379,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置此人物是否在select.def文件的人物列表中
+        /// Get or set whether this character is in the character list in the select.def file
         /// </summary>
         public bool IsInSelectDef
         {
@@ -369,19 +388,19 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取select.def文件中的人物def文件的绝对路径的列表
+        /// Get a list of the absolute path of the character def file in the select.def file
         /// </summary>
         public static string[] CharacterDefPathList
         {
             get { return _characterDefPathList; }
         }
 
-        #endregion
+        #endregion class attributes
 
         /// <summary>
-        /// 根据指定def文件路径创建<see cref="Character"/>类新实例
+        /// Create a new instance of the <see cref="Character"/> class according to the specified def file path
         /// </summary>
-        /// <param name="defPath">人物def文件绝对路径</param>
+        /// <param name="defPath">Character def file absolute path</param>
         /// <exception cref="System.ApplicationException"></exception>
         public Character(string defPath)
         {
@@ -390,22 +409,22 @@ namespace MUGENCharsSet
             PalList = null;
         }
 
-        #region 类方法
+        #region Class Method
 
         /// <summary>
-        /// 用于比较两个Character类的大小
+        /// Used to compare the size of two Character classes
         /// </summary>
-        /// <param name="other">要比较的人物</param>
-        /// <returns>比较的结果</returns>
+        /// <param name="other">the person to compare</param>
+        /// <returns>Result of comparison</returns>
         public int CompareTo(Character other)
         {
             return Name.CompareTo(other.Name);
         }
 
         /// <summary>
-        /// 检查此人物实例的人物def文件是否与指定路径相同
+        /// Check whether the character def file of this character instance is the same as the specified path
         /// </summary>
-        /// <param name="defPath">人物def文件绝对路径</param>
+        /// <param name="defPath">absolute path of character def file</param>
         /// <returns></returns>
         public bool Equals(string defPath)
         {
@@ -420,20 +439,20 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取人物属性设置
+        /// Read character attribute settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void ReadCharacterSetting()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
             IniFiles ini = new IniFiles(DefPath);
             Name = GetTrimName(ini.ReadString(SettingInfo.InfoSection, SettingInfo.NameItem, ""));
             DisplayName = GetTrimName(ini.ReadString(SettingInfo.InfoSection, SettingInfo.DisplayNameItem, ""));
             Cns = ini.ReadString(SettingInfo.FilesSection, SettingInfo.CnsItem, "").GetBackSlashPath();
-            _isWideScreen = ini.ReadString(SettingInfo.InfoSection, SettingInfo.LocalcoordItem, "") != String.Empty;
+            _isWideScreen = ini.ReadString(SettingInfo.InfoSection, SettingInfo.LocalcoordItem, "") != string.Empty;
             Stcommon = ini.ReadString(SettingInfo.FilesSection, SettingInfo.StcommonItem, "");
             SpritePath = ini.ReadString(SettingInfo.FilesSection, SettingInfo.SpriteItem, "");
-            if (!File.Exists(CnsFullPath)) throw new ApplicationException("人物cns文件不存在！");
+            if (!File.Exists(CnsFullPath)) throw new ApplicationException("Character cns file does not exist！");
             ini = new IniFiles(CnsFullPath);
             Life = ini.ReadInteger(SettingInfo.DataSection, SettingInfo.LifeItem, 0);
             Attack = ini.ReadInteger(SettingInfo.DataSection, SettingInfo.AttackItem, 0);
@@ -444,7 +463,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取Pal设置
+        /// Read Pal settings
         /// </summary>
         public void ReadPalSetting()
         {
@@ -462,10 +481,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 扫描当前人物文件夹下所有act文件
+        /// Scan all act files in the current character folder
         /// </summary>
-        /// <param name="actList">act文件相对路径列表</param>
-        /// <param name="dir">act文件夹绝对路径</param>
+        /// <param name="actList">act file relative path list</param>
+        /// <param name="dir">act folder absolute path</param>
         private void ScanActList(List<string> actList, string dir)
         {
             if (!Directory.Exists(dir)) return;
@@ -483,12 +502,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 保存人物设置
+        /// Save character settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void Save()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
             IniFiles ini;
             try
             {
@@ -499,7 +518,7 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                throw new ApplicationException("人物def文件写入失败！");
+                throw new ApplicationException("Failed to write character def file！");
             }
             try
             {
@@ -515,22 +534,21 @@ namespace MUGENCharsSet
                     ReadPalSetting();
                 }
                 catch (ApplicationException) { }
-                throw new ApplicationException("Pal配置项写入失败！");
+                throw new ApplicationException("Failed to write Pal configuration items！");
             }
-            if (!File.Exists(CnsFullPath)) throw new ApplicationException("人物cns文件不存在！");
+            if (!File.Exists(CnsFullPath)) throw new ApplicationException("Character cns file does not exist！");
             int total = MultiSave(new Character[] { this });
-            if (total == 0) throw new ApplicationException("人物cns文件写入失败！");
+            if (total == 0) throw new ApplicationException("Failed to write character cns file！");
         }
 
-
         /// <summary>
-        /// 备份人物设置
+        /// Back up character settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void Backup()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
-            if (!File.Exists(CnsFullPath)) throw new ApplicationException("人物cns文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
+            if (!File.Exists(CnsFullPath)) throw new ApplicationException("Character cns file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(DefPath + BakExt)) throw new Exception();
@@ -540,18 +558,18 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("人物备份失败！");
+                throw new ApplicationException("Character backup failed！");
             }
         }
 
         /// <summary>
-        /// 还原人物设置
+        /// Restore character settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void Restore()
         {
-            if (!File.Exists(DefPath + BakExt)) throw new ApplicationException("人物def备份文件不存在！");
-            if (!File.Exists(CnsFullPath + BakExt)) throw new ApplicationException("人物cns备份文件不存在！");
+            if (!File.Exists(DefPath + BakExt)) throw new ApplicationException("Character def backup file does not exist！");
+            if (!File.Exists(CnsFullPath + BakExt)) throw new ApplicationException("Character cns backup file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(DefPath)) throw new Exception();
@@ -562,17 +580,17 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("人物恢复失败！");
+                throw new ApplicationException("Character recovery failed！");
             }
         }
 
         /// <summary>
-        /// 删除人物(将def文件重命名为带特定后缀名的文件)
+        /// Delete characters (rename the def file to a file with a specific suffix)
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void Delete()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(DefPath + DelExt)) throw new Exception();
@@ -582,18 +600,18 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("人物删除失败！");
+                throw new ApplicationException("Character deletion failed！");
             }
             DeleteCharacterListInSelectDef(new Character[] { this });
         }
 
         /// <summary>
-        /// 转换为宽屏人物包
+        /// Convert to widescreen character pack
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void ConvertToWideScreen()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
             try
             {
                 IsWideScreen = true;
@@ -605,7 +623,7 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                throw new ApplicationException("宽屏人物包转换失败！");
+                throw new ApplicationException("Widescreen character pack conversion failed！");
             }
         }
 
@@ -615,7 +633,7 @@ namespace MUGENCharsSet
         /// <exception cref="System.ApplicationException"></exception>
         public void ConvertToNormalScreen()
         {
-            if (!File.Exists(DefPath)) throw new ApplicationException("人物def文件不存在！");
+            if (!File.Exists(DefPath)) throw new ApplicationException("Character def file does not exist！");
             try
             {
                 IsWideScreen = false;
@@ -627,14 +645,14 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                throw new ApplicationException("普屏人物包转换失败！");
+                throw new ApplicationException("Failed to convert normal screen character pack！");
             }
         }
 
         /// <summary>
-        /// 读取人物模型
+        /// Read character model
         /// </summary>
-        /// <returns>是否读取成功</returns>
+        /// <returns>Whether the reading was successful</returns>
         public bool ReadSpriteFile()
         {
             string sffPath = DefPath.GetDirPathOfFile() + SpritePath.GetBackSlashPath();
@@ -652,10 +670,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取被指定色表替换后的人物模型图像
+        /// Get the character model image replaced by the specified color table
         /// </summary>
-        /// <param name="actPath">色表文件相对路径</param>
-        /// <returns>人物模型图像</returns>
+        /// <param name="actPath">The relative path of the color table file</param>
+        /// <returns>Character model image</returns>
         public Bitmap GetSpriteImageWithPal(string path)
         {
             string actPath = DefPath.GetDirPathOfFile() + path.GetBackSlashPath();
@@ -696,35 +714,35 @@ namespace MUGENCharsSet
             return image;
         }
 
-        #endregion
+        #endregion Class Method
 
-        #region 类静态方法
+        #region Class static method
 
         /// <summary>
-        /// 获取去除界定符的人物名
+        /// Get the character name without delimiter
         /// </summary>
-        /// <param name="name">人物名</param>
-        /// <returns>人物名</returns>
+        /// <param name="name">person’s name</param>
+        /// <returns>Character name</returns>
         public static string GetTrimName(string name)
         {
             return name.Trim(NameDelimeter).Trim();
         }
 
         /// <summary>
-        /// 获取头尾带界定符的人物名
+        /// Get the character name with delimiter at the beginning and end
         /// </summary>
-        /// <param name="name">人物名</param>
-        /// <returns>人物名</returns>
+        /// <param name="name">person’s name</param>
+        /// <returns>Character name</returns>
         public static string GetDelimeterName(string name)
         {
             return NameDelimeter + GetTrimName(name) + NameDelimeter;
         }
 
         /// <summary>
-        /// 批量保存人物
+        /// Save characters in batch
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>修改成功总数</returns>
+        /// <param name="characterList">characterList</param>
+        /// <returns>Total number of successful modifications</returns>
         public static int MultiSave(Character[] characterList)
         {
             int total = 0;
@@ -768,10 +786,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量备份人物
+        /// Back up people in batches
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>备份成功总数</returns>
+        /// <param name="characterList">CharacterList</param>
+        /// <returns>Total number of successful backups</returns>
         public static int MultiBackup(Character[] characterList)
         {
             int total = 0;
@@ -791,10 +809,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量还原人物
+        /// Restore characters in batch
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>还原成功总数</returns>
+        /// <param name="characterList">CharacterList</param>
+        /// <returns>Total number of successful restores</returns>
         public static int MultiRestore(Character[] characterList)
         {
             int total = 0;
@@ -814,10 +832,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量删除人物
+        /// Delete characters in batch
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>删除成功总数</returns>
+        /// <param name="characterList">characterList</param>
+        /// <returns>Total number of successful deletions</returns>
         public static int MultiDelete(Character[] characterList)
         {
             int total = 0;
@@ -838,10 +856,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量转换为宽屏人物包
+        /// Batch convert to widescreen character pack
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>转换成功总数</returns>
+        /// <param name="characterList">CharacterList</param>
+        /// <returns>Total number of successful conversions</returns>
         public static int MultiConvertToWideScreen(Character[] characterList)
         {
             int total = 0;
@@ -861,10 +879,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 批量转换为普屏人物包
+        /// Batch convert to normal screen character pack
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>转换成功总数</returns>
+        /// <param name="characterList">CharacterList</param>
+        /// <returns>Total number of successful conversions</returns>
         public static int MultiConvertToNormalScreen(Character[] characterList)
         {
             int total = 0;
@@ -884,13 +902,13 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 将stcommon文件里的重力修改成适合宽屏的状态
+        /// Modify the gravity in the stcommon file to a state suitable for widescreen
         /// </summary>
-        /// <param name="stcommonPath">stcommon文件绝对路径</param>
+        /// <param name="stcommonPath">stcommon file absolute path</param>
         /// <exception cref="System.ApplicationException"></exception>
         public static void StcommonConvertToWideScreen(string stcommonPath)
         {
-            if (!File.Exists(stcommonPath)) throw new ApplicationException("stcommon文件不存在！");
+            if (!File.Exists(stcommonPath)) throw new ApplicationException("stcommon file does not exist！");
             try
             {
                 string content = File.ReadAllText(stcommonPath, Encoding.Default);
@@ -900,18 +918,18 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("stcommon文件转换宽屏失败！");
+                throw new ApplicationException("stcommon file conversion to widescreen failed！");
             }
         }
 
         /// <summary>
-        /// 将stcommon文件里的重力修改成适合普屏的状态
+        /// Modify the gravity in the stcommon file to a state suitable for general screen
         /// </summary>
-        /// <param name="stcommonPath">stcommon文件绝对路径</param>
+        /// <param name="stcommonPath">stcommon file absolute path</param>
         /// <exception cref="System.ApplicationException"></exception>
         public static void StcommonConvertToNormalScreen(string stcommonPath)
         {
-            if (!File.Exists(stcommonPath)) throw new ApplicationException("stcommon文件不存在！");
+            if (!File.Exists(stcommonPath)) throw new ApplicationException("stcommon file does not exist！");
             try
             {
                 string content = File.ReadAllText(stcommonPath, Encoding.Default);
@@ -921,15 +939,15 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("stcommon文件转换普屏失败！");
+                throw new ApplicationException("Failed to convert stcommon file to normal screen！");
             }
         }
 
         /// <summary>
-        /// 获取stcommon文件里的重力是否为适合宽屏的状态
+        /// Get whether the gravity in the stcommon file is suitable for widescreen
         /// </summary>
-        /// <param name="stcommonContent">stcommon文件内容</param>
-        /// <returns>状态值(-1：未找到相关项, 0：普屏, 1：宽屏)</returns>
+        /// <param name="stcommonContent">stcommon file content</param>
+        /// <returns>Status value (-1: no related items found, 0: normal screen, 1: wide screen)</returns>
         public static int IsStcommonWideScreen(string stcommonContent)
         {
             try
@@ -945,10 +963,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 通过扫描人物文件夹来获取人物列表
+        /// Get the list of people by scanning the people folder
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <param name="charsDir">人物文件夹</param>
+        /// <param name="characterList">characterList</param>
+        /// <param name="charsDir">CharsDir">chars folder</param>
         public static void ScanCharacterDir(List<Character> characterList, string charsDir)
         {
             string[] tempDefList = Directory.GetFiles(charsDir, "*" + Character.DefExt);
@@ -972,13 +990,13 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 通过读取select.def文件来获取人物列表
+        /// Get the list of characters by reading the select.def file
         /// </summary>
-        /// <param name="characterList">人物列表</param>
+        /// <param name="characterList">characterList</param>
         /// <exception cref="System.ApplicationException"></exception>
         public static void ReadCharacterListInSelectDef(List<Character> characterList)
         {
-            if (!File.Exists(MugenSetting.SelectDefPath)) throw new ApplicationException("select.def文件不存在！");
+            if (!File.Exists(MugenSetting.SelectDefPath)) throw new ApplicationException("select.def file does not exist！");
             foreach (string defPath in CharacterDefPathList)
             {
                 System.Windows.Forms.Application.DoEvents();
@@ -994,9 +1012,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取select.def文件中的人物def文件的绝对路径的列表
+        /// Read the list of the absolute path of the character def file in the select.def file
         /// </summary>
-        /// <returns>人物def文件的绝对路径的列表</returns>
+        /// <returns>List of absolute paths of character def files</returns>
         public static void ReadCharacterDefPathListInSelectDef()
         {
             _characterDefPathList = null;
@@ -1033,9 +1051,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 删除select.def文件中的人物列表
+        /// Delete the list of characters in the select.def file
         /// </summary>
-        /// <param name="characterList">人物列表</param>
+        /// <param name="characterList">characterList</param>
         public static void DeleteCharacterListInSelectDef(Character[] characterList)
         {
             if (!File.Exists(MugenSetting.SelectDefPath)) return;
@@ -1071,7 +1089,7 @@ namespace MUGENCharsSet
                     }
                 }
             }
-            fileContent = fileContent.Replace(oriCharacterContent, String.Join("\r\n", characterLines));
+            fileContent = fileContent.Replace(oriCharacterContent, string.Join("\r\n", characterLines));
             try
             {
                 File.WriteAllText(MugenSetting.SelectDefPath, fileContent, Encoding.Default);
@@ -1080,10 +1098,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 将人物添加到select.def文件中
+        /// Add the characters to the select.def file
         /// </summary>
-        /// <param name="characterList">人物列表</param>
-        /// <returns>添加成功总数</returns>
+        /// <param name="characterList">characterList</param>
+        /// <returns>Total number of successful additions</returns>
         public static bool AddCharacterToSelectDef(Character[] characterList)
         {
             if (!File.Exists(MugenSetting.SelectDefPath)) return false;
@@ -1126,14 +1144,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 解压缩人物压缩包
+        /// Unzip the character compressed package
         /// </summary>
-        /// <param name="archivePath">人物压缩包绝对路径</param>
-        /// <returns>所创建的新人物文件夹绝对路径</returns>
+        /// <param name="archivePath">absolute path of character compressed package</param>
+        /// <returns>The absolute path of the new character folder created</returns>
         /// <exception cref="System.ApplicationException"></exception>
         public static string DecompressionCharacterArchive(string archivePath)
         {
-            if (!File.Exists(archivePath)) throw new ApplicationException("压缩包不存在！");
+            if (!File.Exists(archivePath)) throw new ApplicationException("The compressed package does not exist！");
             string tempDirPath = MugenSetting.MugenCharsDirPath + "MugenCharsSetTemp\\";
             DirectoryInfo tempDir;
             try
@@ -1142,7 +1160,7 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("创建临时文件夹失败！");
+                throw new ApplicationException("Failed to create temporary folder！");
             }
             FileStream fs = null;
             try
@@ -1158,7 +1176,7 @@ namespace MUGENCharsSet
                         {
                             reader.WriteEntryToDirectory(tempDirPath, ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
                         }
-                        catch(Exception)
+                        catch (Exception)
                         {
                             continue;
                         }
@@ -1172,7 +1190,7 @@ namespace MUGENCharsSet
                     tempDir.Delete(true);
                 }
                 catch (Exception) { }
-                throw new ApplicationException("解压缩失败！");
+                throw new ApplicationException("Unzip failed！");
             }
             finally
             {
@@ -1200,11 +1218,11 @@ namespace MUGENCharsSet
                     tempDir.Delete(true);
                 }
                 catch (Exception) { }
-                throw new ApplicationException("移动文件夹失败！");
+                throw new ApplicationException("Failed to move folder！");
             }
             return destDirPath;
         }
 
-        #endregion
+        #endregion Class static method
     }
 }

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 关于窗口类
+    /// About the window class
     /// </summary>
     public partial class AboutForm : Form
     {
@@ -20,15 +14,15 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当窗口加载时发生
+        /// Occurs when the window is loaded
         /// </summary>
         private void AboutForm_Load(object sender, EventArgs e)
         {
-            lblAppName.Text = "M.U.G.E.N人物设置 " + Application.ProductVersion;
+            lblAppName.Text = "M.U.G.E.N character settings " + Application.ProductVersion;
         }
 
         /// <summary>
-        /// 当单击程序项目Url时发生
+        /// Occurs when the program item Url is clicked
         /// </summary>
         private void lnkAppUrl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

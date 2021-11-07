@@ -1,45 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 程序配置类
+    /// Program configuration class
     /// </summary>
     public static class AppConfig
     {
-        /// <summary>配置文件名</summary>
+        /// <summary>Configuration file name</summary>
         private const string ConfigFileName = "AppConfig.xml";
-        /// <summary>默认文本编辑器路径</summary>
+
+        /// <summary>Default text editor path</summary>
         public const string DefaultEditProgramPath = "notepad.exe";
 
         /// <summary>
-        /// 程序配置信息结构
+        /// Program configuration information structure
         /// </summary>
         public struct ConfigInfo
         {
-            /// <summary>MUGEN程序绝对路径元素名</summary>
+            /// <summary>MUGEN program absolute path element name</summary>
             public const string MugenExePath = "mugenExePath";
-            /// <summary>自动排序元素名</summary>
+
+            /// <summary>Automatic sorting of element names</summary>
             public const string AutoSort = "autoSort";
-            /// <summary>文本编辑器元素名</summary>
+
+            /// <summary>Text editor element name</summary>
             public const string EditProgramPath = "editProgramPath";
-            /// <summary>读取人物列表类型元素名</summary>
+
+            /// <summary>Read character list type element name</summary>
             public const string ReadCharacterType = "readCharacterType";
-            /// <summary>显示人物宽/普屏标记元素名</summary>
+
+            /// <summary>Display character wide/normal screen tag element name</summary>
             public const string ShowCharacterScreenMark = "showCharacterScreenMark";
         }
 
         /// <summary>
-        /// 人物列表读取方式类型枚举
+        /// Character list reading method type enumeration
         /// </summary>
         public enum ReadCharTypeEnum { SelectDef = 0, CharsDir = 1 };
 
-        /// <summary>当前<see cref="XmlConfig"/>对象</summary>
+        /// <summary>Current <see cref="XmlConfig"/> object</summary>
         private static XmlConfig Config = null;
+
         private static string _mugenExePath = "";
         private static bool _autoSort = false;
         private static ReadCharTypeEnum _readCharacterType = ReadCharTypeEnum.SelectDef;
@@ -47,7 +50,7 @@ namespace MUGENCharsSet
         private static bool _showCharacterScreenMark = false;
 
         /// <summary>
-        /// 获取配置文件绝对路径
+        /// Obtain the absolute path of the configuration file
         /// </summary>
         public static string ConfigPath
         {
@@ -58,7 +61,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置MUGEN程序绝对路径
+        /// Get or set the absolute path of the MUGEN program
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static string MugenExePath
@@ -66,15 +69,15 @@ namespace MUGENCharsSet
             get { return _mugenExePath; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("路径不得为空！");
-                if (Path.GetExtension(value) != ".exe") throw new ApplicationException("必须为可执行程序！");
+                if (value == string.Empty) throw new ApplicationException("The path cannot be empty!");
+                if (Path.GetExtension(value) != ".exe") throw new ApplicationException("Must be an executable program!");
                 _mugenExePath = value;
                 if (Config != null) Config.SetValue(ConfigInfo.MugenExePath, value);
             }
         }
 
         /// <summary>
-        /// 获取或设置人物列表是否自动排列
+        /// Get or set whether the person list is automatically arranged
         /// </summary>
         public static bool AutoSort
         {
@@ -87,7 +90,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置人物列表读取方式
+        /// Get or set the way to read people list
         /// </summary>
         public static ReadCharTypeEnum ReadCharacterType
         {
@@ -100,7 +103,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置文本编辑器路径
+        /// Get or set the path of the text editor
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static string EditProgramPath
@@ -108,15 +111,15 @@ namespace MUGENCharsSet
             get { return _editProgramPath; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("路径不得为空！");
-                if (Path.GetExtension(value) != ".exe") throw new ApplicationException("必须为可执行程序！");
+                if (value == string.Empty) throw new ApplicationException("The path cannot be empty!");
+                if (Path.GetExtension(value) != ".exe") throw new ApplicationException("Must be an executable program!");
                 _editProgramPath = value;
                 if (Config != null) Config.SetValue(ConfigInfo.EditProgramPath, value);
             }
         }
 
         /// <summary>
-        /// 获取或设置是否显示人物宽/普屏标记
+        /// Get or set whether to display character width/full screen mark
         /// </summary>
         public static bool ShowCharacterScreenMark
         {
@@ -129,9 +132,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取配置文件
+        /// Read configuration file
         /// </summary>
-        /// <returns>是否读取成功</returns>
+        /// <returns>Whether the reading was successful</returns>
         public static bool Read()
         {
             try
@@ -152,9 +155,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 保存配置文件
+        /// Save the configuration file
         /// </summary>
-        /// <returns>是否保存成功</returns>
+        /// <returns>Whether the save was successful</returns>
         public static bool Save()
         {
             if (Config != null) return Config.Save();

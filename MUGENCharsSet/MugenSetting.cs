@@ -3,86 +3,108 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MUGENCharsSet
 {
-    #region MUGEN程序配置类
+    #region MUGEN program configuration class
 
     /// <summary>
-    /// MUGEN程序配置类
+    /// MUGEN program configuration class
     /// </summary>
     public static class MugenSetting
     {
-        #region 类常量
+        #region Typical
 
-        /// <summary>人物文件夹相对路径</summary>
+        /// <summary>Character folder relative path</summary>
         public const string CharsDir = @"chars\";
-        /// <summary>Data文件夹相对路径</summary>
+
+        /// <summary>Data folder relative path</summary>
         public const string DataDir = @"data\";
-        /// <summary>mugen.cfg文件名</summary>
+
+        /// <summary>Mugen.cfg file name</summary>
         public const string MugenCfgFileName = "mugen.cfg";
-        /// <summary>公共stcommon文件名</summary>
+
+        /// <summary>Public STCOMMON file name</summary>
         public const string StcommonFileName = "common1.cns";
-        /// <summary>备份文件扩展名</summary>
+
+        /// <summary>Backup file extension</summary>
         public const string BakExt = ".bak";
 
         /// <summary>
-        /// MUGEN程序配置信息结构
+        /// MUGEN program configuration information structure
         /// </summary>
         public struct SettingInfo
         {
-            /// <summary>Options配置分段</summary>
+            /// <summary>Options configuration segmentation</summary>
             public const string OptionsSection = "Options";
-            /// <summary>Info配置分段</summary>
+
+            /// <summary>INFO configuration segmentation</summary>
             public const string InfoSection = "Info";
-            /// <summary>Files配置分段</summary>
+
+            /// <summary>FILES configuration segmentation</summary>
             public const string FilesSection = "Files";
-            /// <summary>Config配置分段</summary>
+
+            /// <summary>Config configuration segmentation</summary>
             public const string ConfigSection = "Config";
-            /// <summary>Video配置分段</summary>
+
+            /// <summary>Video configuration segmentation</summary>
             public const string VideoSection = "Video";
-            /// <summary>system.def文件相对路径配置项</summary>
+
+            /// <summary>System.def file relative path configuration item</summary>
             public const string MotifItem = "motif";
-            /// <summary>select.def文件相对路径配置项</summary>
+
+            /// <summary>Select.def file relative path configuration item</summary>
             public const string SelectDefItem = "select";
-            /// <summary>fight.def文件相对路径配置项</summary>
+
+            /// <summary>Fight.def file relative path configuration item</summary>
             public const string FightDefItem = "fight";
-            /// <summary>系统localcoord配置项</summary>
+
+            /// <summary>System LocalCoord configuration item</summary>
             public const string LocalcoordItem = "localcoord";
-            /// <summary>Difficulty配置项</summary>
+
+            /// <summary>DIFFICULTY configuration item</summary>
             public const string DifficultyItem = "Difficulty";
-            /// <summary>Life配置项</summary>
+
+            /// <summary>Life configuration item</summary>
             public const string LifeItem = "Life";
-            /// <summary>Time配置项</summary>
+
+            /// <summary>TIME configuration item</summary>
             public const string TimeItem = "Time";
-            /// <summary>GameSpeed配置项</summary>
+
+            /// <summary>Game speed configuration item</summary>
             public const string GameSpeedItem = "GameSpeed";
-            /// <summary>GameSpeed(帧率)配置项</summary>
+
+            /// <summary>Game Speed ​​Configuration Item</summary>
             public const string GameFrameItem = "GameSpeed";
-            /// <summary>Team.1VS2Life配置项</summary>
+
+            /// <summary>Team.1vs2life configuration item</summary>
             public const string Team1VS2LifeItem = "Team.1VS2Life";
-            /// <summary>Team.LoseOnKO配置项</summary>
+
+            /// <summary>Team.lose On KO Configuration Item</summary>
             public const string TeamLoseOnKOItem = "Team.LoseOnKO";
-            /// <summary>GameWidth配置项</summary>
+
+            /// <summary>Game Width Configuration Item</summary>
             public const string GameWidthItem = "GameWidth";
-            /// <summary>GameHeight配置项</summary>
+
+            /// <summary>Game HEIGHT configuration item</summary>
             public const string GameHeightItem = "GameHeight";
-            /// <summary>RenderMode配置项</summary>
+
+            /// <summary>Render Mode Configuration Item</summary>
             public const string RenderModeItem = "RenderMode";
-            /// <summary>FullScreen配置项</summary>
+
+            /// <summary>Full Screen configuration item</summary>
             public const string FullScreenItem = "FullScreen";
         }
 
         /// <summary>
-        /// MUGEN程序版本枚举
+        /// Mugen program version enumeration
         /// </summary>
         public enum MugenVersion { WIN, V1_X };
 
-        #endregion
+        #endregion Typical
 
-        #region 类私有成员
+        #region Private member
 
         private static string _mugenExePath;
         private static string _mugenCfgPath;
@@ -106,12 +128,12 @@ namespace MUGENCharsSet
         private static KeyPressSetting _keyPressP2;
         private static MugenVersion _version = MugenVersion.V1_X;
 
-        #endregion
+        #endregion Private member
 
-        #region 类属性
+        #region Class properties
 
         /// <summary>
-        /// 获取MUGEN程序绝对路径
+        /// Get a Mugen program absolute path
         /// </summary>
         private static string MugenExePath
         {
@@ -119,7 +141,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取MUGEN程序根目录绝对路径
+        /// Get a Mugen program root directory absolute path
         /// </summary>
         public static string MugenDirPath
         {
@@ -127,7 +149,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取MUGEN Data文件夹绝对路径
+        /// Get the absolute path of the Mugen Data folder
         /// </summary>
         public static string MugenDataDirPath
         {
@@ -135,7 +157,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取MUGEN人物文件夹绝对路径
+        /// Get the absolute path of Mugen character folder
         /// </summary>
         public static string MugenCharsDirPath
         {
@@ -143,7 +165,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取mugen.cfg文件绝对路径
+        /// Get the absolute path of Mugen.cfg files
         /// </summary>
         public static string MugenCfgPath
         {
@@ -151,7 +173,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置system.def文件绝对路径
+        /// Get or set the system.def file absolute path
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static string SystemDefPath
@@ -159,8 +181,8 @@ namespace MUGENCharsSet
             get { return _systemDefPath; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("路径不得为空！");
-                if (!File.Exists(MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+                if (value == string.Empty) throw new ApplicationException("The path must not be empty！");
+                if (!File.Exists(MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
                 try
                 {
                     IniFiles ini = new IniFiles(MugenCfgPath);
@@ -169,14 +191,14 @@ namespace MUGENCharsSet
                 }
                 catch (ApplicationException)
                 {
-                    throw new ApplicationException("mugen.cfg文件写入失败！");
+                    throw new ApplicationException("Mugen.cfg file failed！");
                 }
                 _systemDefPath = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置select.def文件绝对路径
+        /// Get or set the SELECT.DEF file absolute path
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static string SelectDefPath
@@ -184,25 +206,25 @@ namespace MUGENCharsSet
             get { return _selectDefPath; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("路径不得为空！");
-                if (!File.Exists(SystemDefPath)) throw new ApplicationException("system.def文件不存在！");
+                if (value == string.Empty) throw new ApplicationException("The path must not be empty！");
+                if (!File.Exists(SystemDefPath)) throw new ApplicationException("System.def file does not exist！");
                 try
                 {
                     IniFiles ini = new IniFiles(SystemDefPath);
                     string path = GetIniFileBestPath(SystemDefPath, value);
-                    if (path == String.Empty) new ApplicationException();
+                    if (path == string.Empty) new ApplicationException();
                     ini.WriteString(SettingInfo.FilesSection, SettingInfo.SelectDefItem, path.GetSlashPath());
                 }
                 catch (ApplicationException)
                 {
-                    throw new ApplicationException("system.def文件写入失败！");
+                    throw new ApplicationException("System.def file failed！");
                 }
                 _selectDefPath = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置fight.def文件绝对路径
+        /// Get or set the fast.def file absolute path
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static string FightDefPath
@@ -210,25 +232,25 @@ namespace MUGENCharsSet
             get { return _fightDefPath; }
             set
             {
-                if (value == String.Empty) throw new ApplicationException("路径不得为空！");
-                if (!File.Exists(SystemDefPath)) throw new ApplicationException("system.def文件不存在！");
+                if (value == string.Empty) throw new ApplicationException("The path must not be empty！");
+                if (!File.Exists(SystemDefPath)) throw new ApplicationException("System.def file does not exist！");
                 try
                 {
                     IniFiles ini = new IniFiles(SystemDefPath);
                     string path = GetIniFileBestPath(SystemDefPath, value);
-                    if (path == String.Empty) new ApplicationException();
+                    if (path == string.Empty) new ApplicationException();
                     ini.WriteString(SettingInfo.FilesSection, SettingInfo.FightDefItem, path.GetSlashPath());
                 }
                 catch (ApplicationException)
                 {
-                    throw new ApplicationException("system.def文件写入失败！");
+                    throw new ApplicationException("System.def file failed！");
                 }
                 _fightDefPath = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置系统localcoord
+        /// Get or set system localcoord
         /// </summary>
         public static Size Localcoord
         {
@@ -237,7 +259,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置系统画面包是否为宽屏
+        /// Get or set the system picture package to be a widescreen
         /// </summary>
         public static bool IsWideScreen
         {
@@ -246,7 +268,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Difficulty
+        /// Get or set Difficulty
         /// </summary>
         public static int Difficulty
         {
@@ -255,7 +277,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Life
+        /// Get or set up LIFE
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int Life
@@ -263,13 +285,13 @@ namespace MUGENCharsSet
             get { return _life; }
             set
             {
-                if (value < 0) throw new ApplicationException("Life不得小于0！");
+                if (value < 0) throw new ApplicationException("Life is not less than 0！");
                 _life = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置Time
+        /// Get or set up TIME
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int Time
@@ -277,13 +299,13 @@ namespace MUGENCharsSet
             get { return _time; }
             set
             {
-                if (value < -1) throw new ApplicationException("Time不得小于-1！");
+                if (value < -1) throw new ApplicationException("Time is not less than -1！");
                 _time = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置GameSpeed
+        /// Get or set up Game Speed
         /// </summary>
         public static int GameSpeed
         {
@@ -292,7 +314,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置GameSpeed(帧率)
+        /// Get or set Game Speed ​​(frame rate)
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int GameFrame
@@ -300,13 +322,13 @@ namespace MUGENCharsSet
             get { return _gameFrame; }
             set
             {
-                if (value < 10) throw new ApplicationException("GameSpeed(帧率)不得小于10！");
+                if (value < 10) throw new ApplicationException("Game speed is not less than 10！");
                 _gameFrame = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置Team1VS2Life
+        /// Get or set Team1vs2Life
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int Team1VS2Life
@@ -314,13 +336,13 @@ namespace MUGENCharsSet
             get { return _team1VS2Life; }
             set
             {
-                if (value < 0) throw new ApplicationException("Team1VS2Life不得小于0！");
+                if (value < 0) throw new ApplicationException("Team1vs2life must not be less than 0！");
                 _team1VS2Life = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置是否TeamLoseOnKO
+        /// Get or set to Team Lose on Ko
         /// </summary>
         public static bool TeamLoseOnKO
         {
@@ -329,7 +351,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置GameWidth
+        /// Get or set Game Width
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int GameWidth
@@ -337,13 +359,13 @@ namespace MUGENCharsSet
             get { return _gameWidth; }
             set
             {
-                if (value <= 0) throw new ApplicationException("GameWidth不得小于1！");
+                if (value <= 0) throw new ApplicationException("Game Width is not less than 1！");
                 _gameWidth = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置GameHeight
+        /// Get or set up Game HearT
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static int GameHeight
@@ -351,13 +373,13 @@ namespace MUGENCharsSet
             get { return _gameHeight; }
             set
             {
-                if (value <= 0) throw new ApplicationException("GameHeight不得小于1！");
+                if (value <= 0) throw new ApplicationException("Game HEIGHT is not less than 1！");
                 _gameHeight = value;
             }
         }
 
         /// <summary>
-        /// 获取或设置RenderMode
+        /// Get or set Render Mode
         /// </summary>
         public static string RenderMode
         {
@@ -366,7 +388,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置是否全屏
+        /// Get or set to full screen
         /// </summary>
         public static bool FullScreen
         {
@@ -375,7 +397,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置P1按键
+        /// Get or set P1 buttons
         /// </summary>
         public static KeyPressSetting KeyPressP1
         {
@@ -384,7 +406,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置P2按键
+        /// Get or set P2 buttons
         /// </summary>
         public static KeyPressSetting KeyPressP2
         {
@@ -393,54 +415,54 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取当前MUGEN程序版本
+        /// Get the current MUGEN program version
         /// </summary>
         public static MugenVersion Version
         {
             get { return _version; }
         }
 
-        #endregion
+        #endregion Class properties
 
-        #region 类方法
+        #region Class method
 
         /// <summary>
-        /// 初始化方法
-        /// </summary>
-        /// <param name="mugenExePath">MUGEN程序绝对路径</param>
+        /// initialization method
+        /// </ summary>
+        /// <param name = "Mugen EXE PATH"> MUGEN program absolute path </ param>
         /// <exception cref="System.ApplicationException"></exception>
         public static void Init(string mugenExePath)
         {
-            if (!File.Exists(mugenExePath)) throw new ApplicationException("MUGEN程序不存在！");
+            if (!File.Exists(mugenExePath)) throw new ApplicationException("Mugen program does not exist！");
             _mugenExePath = mugenExePath.GetBackSlashPath();
             _mugenCfgPath = MugenDataDirPath + MugenCfgFileName;
             if (!File.Exists(MugenCfgPath))
             {
                 _mugenExePath = "";
                 _mugenCfgPath = "";
-                throw new ApplicationException("mugen.cfg文件不存在！");
+                throw new ApplicationException("Mugen.cfg file does not exist！");
             }
         }
 
         /// <summary>
-        /// 读取MUGEN程序配置
+        /// Read MUGEN program configuration
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static void ReadMugenSetting()
         {
-            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             IniFiles ini = new IniFiles(MugenCfgPath);
             _systemDefPath = MugenDirPath + ini.ReadString(SettingInfo.OptionsSection, SettingInfo.MotifItem, "").GetBackSlashPath();
-            if (SystemDefPath == String.Empty) throw new ApplicationException("system.def路径读取失败！");
+            if (SystemDefPath == string.Empty) throw new ApplicationException("System.def path read failed！");
             if (!File.Exists(SystemDefPath)) throw new ApplicationException("system.def文件不存在！");
             ini = new IniFiles(SystemDefPath);
             string selectDefFileName = ini.ReadString(SettingInfo.FilesSection, SettingInfo.SelectDefItem, "");
-            if (selectDefFileName == String.Empty) throw new ApplicationException("select.def路径读取失败！");
+            if (selectDefFileName == string.Empty) throw new ApplicationException("Select.def path read failed！");
             _selectDefPath = GetIniFileExistPath(SystemDefPath, selectDefFileName);
-            if (SelectDefPath == String.Empty) throw new ApplicationException("select.def文件不存在！");
+            if (SelectDefPath == string.Empty) throw new ApplicationException("select.def file does not exist！");
             _version = MugenVersion.V1_X;
             string localcoord = ini.ReadString(SettingInfo.InfoSection, SettingInfo.LocalcoordItem, "");
-            if (localcoord != String.Empty)
+            if (localcoord != string.Empty)
             {
                 string[] size = localcoord.Split(',');
                 try
@@ -465,12 +487,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取mugen.cfg文件配置
+        /// Read Mugen.cfg file configuration
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static void ReadMugenCfgSetting()
         {
-            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             try
             {
                 IniFiles ini = new IniFiles(MugenCfgPath);
@@ -488,19 +510,19 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("读取mugen.cfg文件失败！");
+                throw new ApplicationException("Read the mugen.cfg file failed！");
             }
             KeyPressP1 = new KeyPressSetting(KeyPressSetting.SettingInfo.P1KeysSection);
             KeyPressP2 = new KeyPressSetting(KeyPressSetting.SettingInfo.P2KeysSection);
         }
 
         /// <summary>
-        /// 保存mugen.cfg文件配置
+        /// Save MUGEN.CFG file configuration
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static void SaveMugenCfgSetting()
         {
-            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(MugenCfgPath)) throw new ApplicationException();
@@ -522,19 +544,19 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                throw new ApplicationException("设置保存失败！");
+                throw new ApplicationException("Set saving failed！");
             }
             KeyPressP1.Save();
             KeyPressP2.Save();
         }
 
         /// <summary>
-        /// 备份mugen.cfg文件
+        /// Backup Mugen.cfg file
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static void BackupMugenCfgSetting()
         {
-            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(MugenCfgPath + BakExt)) throw new Exception();
@@ -542,17 +564,17 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("文件备份失败！");
+                throw new ApplicationException("File backup failed！");
             }
         }
 
         /// <summary>
-        /// 还原mugen.cfg文件
+        /// Restore Mugen.cfg file
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public static void RestoreMugenCfgSetting()
         {
-            if (!File.Exists(MugenCfgPath + BakExt)) throw new ApplicationException("备份文件不存在！");
+            if (!File.Exists(MugenCfgPath + BakExt)) throw new ApplicationException("Backup file does not exist！");
             try
             {
                 if (!Tools.SetFileNotReadOnly(MugenCfgPath + BakExt)) throw new Exception();
@@ -561,19 +583,19 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("文件恢复失败！");
+                throw new ApplicationException("File recovery failed！");
             }
         }
 
         /// <summary>
-        /// 获取MUGEN中可用的配置文件绝对路径
+        /// Get absolute paths available in Mugen
         /// </summary>
-        /// <param name="parentFilePath">父配置文件绝对路径</param>
-        /// <param name="iniFileName">配置文件相对路径</param>
-        /// <returns>配置文件绝对路径</returns>
+        /// <param name="parentFilePath">Parent configuration file absolute path</param>
+        /// <param name="iniFileName">Profile relative path</param>
+        /// <returns>Profile absolute path</returns>
         public static string GetIniFileExistPath(string parentFilePath, string iniFileName)
         {
-            if (parentFilePath == String.Empty) return "";
+            if (parentFilePath == string.Empty) return "";
             string path = (parentFilePath.GetDirPathOfFile() + iniFileName).GetBackSlashPath();
             if (File.Exists(path)) return path;
             path = (MugenSetting.MugenDataDirPath + iniFileName).GetBackSlashPath();
@@ -584,15 +606,15 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取MUGEN中配置文件最佳的相对路径
+        /// Get the best relative path in Mugen's configuration file
         /// </summary>
-        /// <param name="parentFilePath">父配置文件绝对路径</param>
-        /// <param name="iniFilePath">配置文件绝对路径</param>
-        /// <returns>配置文件相对路径</returns>
+        /// <param name="parentFilePath">Parent configuration file absolute path</param>
+        /// <param name="iniFilePath">Profile absolute path</param>
+        /// <returns>Profile relative path</returns>
         public static string GetIniFileBestPath(string parentFilePath, string iniFilePath)
         {
-            if (parentFilePath == String.Empty) return "";
-            if (iniFilePath == String.Empty) return "";
+            if (parentFilePath == string.Empty) return "";
+            if (iniFilePath == string.Empty) return "";
             parentFilePath = parentFilePath.GetBackSlashPath();
             iniFilePath = iniFilePath.GetBackSlashPath();
             if (iniFilePath.StartsWith(parentFilePath.GetDirPathOfFile())) return iniFilePath.Substring(parentFilePath.GetDirPathOfFile().Length);
@@ -601,62 +623,76 @@ namespace MUGENCharsSet
             else return "";
         }
 
-        #endregion
-
+        #endregion Class method
     }
 
-    #endregion
+    #endregion MUGEN程序配置类
 
-    #region MUGEN按键配置类
+    #region MUGEN button configuration class
 
     /// <summary>
-    /// MUGEN按键配置类
+    /// MUGEN button configuration class
     /// </summary>
     public class KeyPressSetting
     {
         /// <summary>
-        /// MUGEN按键配置信息结构
+        /// MUGEN button configuration information structure
         /// </summary>
         public struct SettingInfo
         {
-            /// <summary>P1 Keys配置分段</summary>
+            /// <summary>P1 Keys configuration segmentation</summary>
             public const string P1KeysSection = "P1 Keys";
-            /// <summary>P2 Keys配置分段</summary>
+
+            /// <summary>P2 Keys configuration segmentation</summary>
             public const string P2KeysSection = "P2 Keys";
-            /// <summary>Jump配置项</summary>
+
+            /// <summary>JUMP configuration item</summary>
             public const string JumpItem = "Jump";
-            /// <summary>Crouch配置项</summary>
+
+            /// <summary>CROUCH configuration item</summary>
             public const string CrouchItem = "Crouch";
-            /// <summary>Left配置项</summary>
+
+            /// <summary>LEFT configuration item</summary>
             public const string LeftItem = "Left";
-            /// <summary>Right配置项</summary>
+
+            /// <summary>Right configuration item</summary>
             public const string RightItem = "Right";
-            /// <summary>A配置项</summary>
+
+            /// <summary>A configuration item</summary>
             public const string AItem = "A";
-            /// <summary>B配置项</summary>
+
+            /// <summary>B configuration item</summary>
             public const string BItem = "B";
-            /// <summary>C配置项</summary>
+
+            /// <summary>C configuration item</summary>
             public const string CItem = "C";
-            /// <summary>X配置项</summary>
+
+            /// <summary>X configuration item</summary>
             public const string XItem = "X";
-            /// <summary>Y配置项</summary>
+
+            /// <summary>Y configuration item</summary>
             public const string YItem = "Y";
-            /// <summary>Z配置项</summary>
+
+            /// <summary>Z configuration item</summary>
             public const string ZItem = "Z";
-            /// <summary>Start配置项</summary>
+
+            /// <summary>START configuration item</summary>
             public const string StartItem = "Start";
         }
 
-        /// <summary>按键编码左界定符</summary>
+        /// <summary>Button code left definition</summary>
         public const string LeftDelimeter = "(";
-        /// <summary>按键编码右界定符</summary>
+
+        /// <summary>Button code right definition</summary>
         public const string RightDelimeter = ")";
-        /// <summary>MUGEN 1.x版按键编码表</summary>
+
+        /// <summary>MUGEN 1.X version button coding table</summary>
         private static readonly Dictionary<ushort, string> KeyCodeV1_X = new Dictionary<ushort, string>()
         {
             {0, "Not Used"}, {8, "Backspace"}, {9, "Tab"}, {13, "Return"}, {19, "Pause"}, {27, "Escape"}, {32, "Space"}, {39, "'"}, {44, ","}, {45, "-"}, {46, "."}, {47, "/"}, {48, "0"}, {49, "1"}, {50, "2"}, {51, "3"}, {52, "4"}, {53, "5"}, {54, "6"}, {55, "7"}, {56, "8"}, {57, "9"}, {59, ";"}, {61, "="}, {91, "["}, {92, "\\"}, {93, "]"}, {96, "`"}, {97, "a"}, {98, "b"}, {99, "c"}, {100, "d"}, {101, "e"}, {102, "f"}, {103, "g"}, {104, "h"}, {105, "i"}, {106, "j"}, {107, "k"}, {108, "l"}, {109, "m"}, {110, "n"}, {111, "o"}, {112, "p"}, {113, "q"}, {114, "r"}, {115, "s"}, {116, "t"}, {117, "u"}, {118, "v"}, {119, "w"}, {120, "x"}, {121, "y"}, {122, "z"}, {127, "Delete"}, {256, "Num 0"}, {257, "Num 1"}, {258, "Num 2"}, {259, "Num 3"}, {260, "Num 4"}, {261, "Num 5"}, {262, "Num 6"}, {263, "Num 7"}, {264, "Num 8"}, {265, "Num 9"}, {266, "Num ."}, {267, "Num /"}, {268, "Num *"}, {269, "Num -"}, {270, "Num +"}, {271, "Num Enter"}, {272, "Equals"}, {273, "Up"}, {274, "Down"}, {275, "Right"}, {276, "Left"}, {277, "Insert"}, {278, "Home"}, {279, "End"}, {280, "Page Up"}, {281, "Page Down"}, {282, "F1"}, {283, "F2"}, {284, "F3"}, {285, "F4"}, {286, "F5"}, {287, "F6"}, {288, "F7"}, {289, "F8"}, {290, "F9"}, {291, "F10"}, {292, "F11"}, {293, "F12"}, {294, "F13"}, {295, "F14"}, {296, "F15"}, {300, "Num Lock"}, {301, "Caps Lock"}, {302, "Scroll Lock"}, {303, "Right Shift"}, {304, "Left Shift"}, {305, "Right Ctrl"}, {306, "Left Ctrl"}, {307, "Right Alt"}, {308, "Left Alt"}, {311, "Left Super"}, {312, "Right Super"}, {316, "Print Screen"}, {319, "Menu"}
         };
-        /// <summary>MUGEN WIN版按键编码表</summary>
+
+        /// <summary>MUGEN WIN version button code table</summary>
         private static readonly Dictionary<ushort, string> KeyCodeWIN = new Dictionary<ushort, string>()
         {
             {0, "Not Used"}, {1, "Esc"}, {2, "1"}, {3, "2"}, {4, "3"}, {5, "4"}, {6, "5"}, {7, "6"}, {8, "7"}, {9, "8"}, {10, "9"}, {11, "0"}, {12, "-"}, {13, "="}, {14, "Backspace"}, {15, "Tab"}, {16, "Q"}, {17, "W"}, {18, "E"}, {19, "R"}, {20, "T"}, {21, "Y"}, {22, "U"}, {23, "I"}, {24, "O"}, {25, "P"}, {26, "["}, {27, "]"}, {28, "Enter"}, {29, "Left Ctrl"}, {30, "A"}, {31, "S"}, {32, "D"}, {33, "F"}, {34, "G"}, {35, "H"}, {36, "J"}, {37, "K"}, {38, "L"}, {39, ";"}, {40, "'"}, {41, "`"}, {42, "Left Shift"}, {43, "\\"}, {44, "Z"}, {45, "X"}, {46, "C"}, {47, "V"}, {48, "B"}, {49, "N"}, {50, "M"}, {51, ", "}, {52, "."}, {53, "/"}, {54, "Right Shift"}, {55, "Pad *"}, {56, "Left Alt"}, {57, "Space"}, {58, "Caps Lock"}, {59, "F1"}, {60, "F2"}, {61, "F3"}, {62, "F4"}, {63, "F5"}, {64, "F6"}, {65, "F7"}, {66, "F8"}, {67, "F9"}, {68, "F10"}, {69, "Num Lock"}, {70, "Scroll Lock"}, {71, "Pad 7"}, {72, "Pad 8"}, {73, "Pad 9"}, {74, "Pad -"}, {75, "Pad 4"}, {76, "Pad 5"}, {77, "Pad 6"}, {78, "Pad +"}, {79, "Pad 1"}, {80, "Pad 2"}, {81, "Pad 3"}, {82, "Pad 0"}, {83, "Pad ."}, {87, "F11"}, {88, "F12"}, {156, "Pad Enter"}, {157, "Right Ctrl"}, {181, "Pad /"}, {184, "Right Alt"}, {199, "Home"}, {200, "Up"}, {201, "Page Up"}, {203, "Left"}, {205, "Right"}, {207, "End"}, {208, "Down"}, {209, "Page Down"}, {210, "Insert"}, {211, "Delete"}
@@ -676,7 +712,7 @@ namespace MUGENCharsSet
         private ushort _start;
 
         /// <summary>
-        /// 获取或设置按键类型
+        /// Get or set key types
         /// </summary>
         public string KeyPressType
         {
@@ -685,7 +721,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Jump按键码
+        /// Get or set the JUMP button code
         /// </summary>
         public ushort Jump
         {
@@ -694,7 +730,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Crouch按键码
+        /// Get or set the CROUCH button code
         /// </summary>
         public ushort Crouch
         {
@@ -703,7 +739,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Left按键码
+        /// Get or set the Left button code
         /// </summary>
         public ushort Left
         {
@@ -712,7 +748,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Right按键码
+        /// Get or set up Right button code
         /// </summary>
         public ushort Right
         {
@@ -721,7 +757,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置A按键码
+        /// Get or set a button code
         /// </summary>
         public ushort A
         {
@@ -730,7 +766,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置B按键码
+        /// Get or set B button code
         /// </summary>
         public ushort B
         {
@@ -739,7 +775,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置C按键码
+        /// Get or set C button code
         /// </summary>
         public ushort C
         {
@@ -748,7 +784,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置X按键码
+        /// Get or set x button code
         /// </summary>
         public ushort X
         {
@@ -757,7 +793,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Y按键码
+        /// Get or set Y button code
         /// </summary>
         public ushort Y
         {
@@ -766,7 +802,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Z按键码
+        /// Get or set z button code
         /// </summary>
         public ushort Z
         {
@@ -775,7 +811,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取或设置Start按键码
+        /// Get or set START button code
         /// </summary>
         public ushort Start
         {
@@ -784,7 +820,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取MUGEN按键编码表
+        /// Get Mugen button coding table
         /// </summary>
         public static Dictionary<ushort, string> KeyCode
         {
@@ -796,9 +832,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定按键类型创建<see cref="KeyPressSetting"/>类新实例
+        /// Create according to the specified button type<see cref="KeyPressSetting"/>New instance
         /// </summary>
-        /// <param name="keyPressType">按键类型</param>
+        /// <param name="keyPressType">Button type</param>
         /// <exception cref="System.ApplicationException"></exception>
         public KeyPressSetting(string keyPressType)
         {
@@ -807,12 +843,12 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 读取MUGEN按键设置
+        /// Read MuGen button settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void ReadKeyPressSetting()
         {
-            if (!File.Exists(MugenSetting.MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenSetting.MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             try
             {
                 IniFiles ini = new IniFiles(MugenSetting.MugenCfgPath);
@@ -830,17 +866,17 @@ namespace MUGENCharsSet
             }
             catch (Exception)
             {
-                throw new ApplicationException("读取MUGEN按键失败！");
+                throw new ApplicationException("Read the MUGEN button failed！");
             }
         }
 
         /// <summary>
-        /// 保存MUGEN按键设置
+        /// Save MUGEN button settings
         /// </summary>
         /// <exception cref="System.ApplicationException"></exception>
         public void Save()
         {
-            if (!File.Exists(MugenSetting.MugenCfgPath)) throw new ApplicationException("mugen.cfg文件不存在！");
+            if (!File.Exists(MugenSetting.MugenCfgPath)) throw new ApplicationException("Mugen.cfg file does not exist！");
             try
             {
                 IniFiles ini = new IniFiles(MugenSetting.MugenCfgPath);
@@ -858,15 +894,15 @@ namespace MUGENCharsSet
             }
             catch (ApplicationException)
             {
-                throw new ApplicationException("按键设置保存失败！");
+                throw new ApplicationException("Button settings save failed！");
             }
         }
 
         /// <summary>
-        /// 获取指定的按键编码名称
+        /// Get the specified button coding name
         /// </summary>
-        /// <param name="keyCode">按键编码</param>
-        /// <returns>按键编码名称</returns>
+        /// <param name="keyCode">Button coding</param>
+        /// <returns>Button coding name</returns>
         public static string GetKeyName(ushort keyCode)
         {
             if (KeyCode.ContainsKey(keyCode)) return KeyCode[keyCode];
@@ -874,10 +910,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取指定的按键编码
+        /// Get the specified button coding
         /// </summary>
-        /// <param name="keyName">按键编码名称</param>
-        /// <returns>按键编码</returns>
+        /// <param name="keyName">Button coding name</param>
+        /// <returns>Button coding</returns>
         /// <exception cref="System.ApplicationException"></exception>
         public static ushort GetKeyCode(string keyName)
         {
@@ -891,7 +927,7 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    throw new ApplicationException("按键编码格式错误");
+                    throw new ApplicationException("Button coding format error");
                 }
                 return keyCode;
             }
@@ -903,12 +939,12 @@ namespace MUGENCharsSet
                 }
                 catch (Exception)
                 {
-                    throw new ApplicationException("按键编码格式错误");
+                    throw new ApplicationException("Button coding format error");
                 }
                 return keyCode;
             }
         }
     }
 
-    #endregion
+    #endregion MUGEN button configuration class
 }

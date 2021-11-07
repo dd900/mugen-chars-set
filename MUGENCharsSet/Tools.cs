@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 工具类
+    /// Tools
     /// </summary>
     public static class Tools
     {
         /// <summary>
-        /// 获取程序所在文件夹绝对路径
+        /// Get the folder of the program where the program is absolutely path
         /// </summary>
         public static string AppDirPath
         {
@@ -21,10 +19,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取末尾带反斜杠(\)的文件夹路径
+        /// Get the folder path of the end tail strip backslash ()
         /// </summary>
-        /// <param name="dirPath">文件夹路径</param>
-        /// <returns>文件夹路径</returns>
+        /// <param name="dirPath">Folder path</param>
+        /// <returns>Folder path</returns>
         public static string GetFormatDirPath(this string dirPath)
         {
             if (dirPath.Length > 0 && dirPath[dirPath.Length - 1] != '\\')
@@ -33,10 +31,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取文件所在的文件夹路径
+        /// Get the folder path where the file is located
         /// </summary>
-        /// <param name="filePath">文件路径</param>
-        /// <returns>文件夹路径</returns>
+        /// <param name="filePath">file path</param>
+        /// <returns>Folder path</returns>
         public static string GetDirPathOfFile(this string filePath)
         {
             try
@@ -47,30 +45,30 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取正斜杠(/)的文件(夹)路径
+        /// Get files (clips) paths for forward slash (/)
         /// </summary>
-        /// <param name="path">文件(夹)路径</param>
-        /// <returns>文件(夹)路径</returns>
+        /// <param name="path">File (clip) path</param>
+        /// <returns>File (clip) path</returns>
         public static string GetSlashPath(this string path)
         {
             return path.Replace('\\', '/');
         }
 
         /// <summary>
-        /// 获取反斜杠(\)的文件(夹)路径
+        /// Get a file (clip) path (clip) path
         /// </summary>
-        /// <param name="path">文件(夹)路径</param>
-        /// <returns>文件(夹)路径</returns>
+        /// <param name="path">File (clip) path</param>
+        /// <returns>File (clip) path</returns>
         public static string GetBackSlashPath(this string path)
         {
             return path.Replace('/', '\\');
         }
 
         /// <summary>
-        /// 取消指定文件只读属性
+        /// Cancel specified file read-only properties
         /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <returns>是否修改成功</returns>
+        /// <param name="path">file path</param>
+        /// <returns>Whether to modify success</returns>
         public static bool SetFileNotReadOnly(string path)
         {
             if (!File.Exists(path)) return true;
@@ -90,9 +88,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 使配置文件规格化(在文件开头添加空行、将UTF-8及Unicode编码的文件转换为默认编码)
+        /// Make the configuration file specifications (add a blank line at the beginning, convert UTF-8 and Unicode encoded files to default encoding)
         /// </summary>
-        /// <param name="path">文件绝对路径</param>
+        /// <param name="path">File absolute path</param>
         public static void IniFileStandardization(string path)
         {
             FileStream fs = null;
@@ -127,10 +125,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取ComboBox控件中与指定数值相同的索引项
+        /// Get the same index item as the specified value in the COMBO Box control
         /// </summary>
-        /// <param name="combobox">ComboBox控件</param>
-        /// <param name="value">指定数值</param>
+        /// <param name="combobox">Combo Box control</param>
+        /// <param name="value">Specified value</param>
         public static int GetComboBoxEqualValueIndex(ComboBox combobox, int value)
         {
             for (int i = 0; i < combobox.Items.Count; i++)
@@ -151,10 +149,10 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取ComboBox控件中与指定数值相同的索引项
+        /// Get the same index item as the specified value in the COMBO Box control
         /// </summary>
-        /// <param name="combobox">ComboBox控件</param>
-        /// <param name="value">指定数值</param>
+        /// <param name="combobox">Combo Box control</param>
+        /// <param name="value">Specified value</param>
         public static int GetComboBoxEqualValueIndex(ComboBox combobox, string value)
         {
             for (int i = 0; i < combobox.Items.Count; i++)
@@ -168,11 +166,11 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 获取与其它文件夹不重名的文件夹绝对路径
+        /// Get a folder absolute path with other folders.
         /// </summary>
-        /// <param name="parentDirPath">父文件夹绝对路径</param>
-        /// <param name="dirName">想要创建的文件夹名字</param>
-        /// <returns>与其它文件夹不重名的文件夹绝对路径</returns>
+        /// <param name="parentDirPath">Parent folder absolute path</param>
+        /// <param name="dirName">Want to create folder name</param>
+        /// <returns>Folder absolute path with other folders</returns>
         public static string GetNonExistsDirPath(string parentDirPath, string dirName)
         {
             string path = parentDirPath + dirName + "\\";

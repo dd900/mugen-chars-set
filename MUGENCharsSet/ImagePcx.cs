@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -9,33 +7,36 @@ using System.Runtime.InteropServices;
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// PCX操作类
+    /// PCX operation class
     /// zgke@sina.com
     /// qq:116149
     /// </summary>
     public class ImagePcx
     {
         /// <summary>
-        /// PCX文件头
+        /// PCX file header
         /// </summary>
         private class PCXHEAD
         {
             public byte[] m_Data = new byte[128];
 
             /// <summary>
-            /// 文件头必须为 0A;
+            /// The file header must be 0A;
             /// </summary>
             public byte Manufacturer { get { return m_Data[0]; } }
+
             /// <summary>
-            /// 0：PC Paintbrush 2.5 版 　　2：PC Paintbrush 2.8 版　　5：PC Paintbrush 3.0 版
+            /// 0: PC Paintbrush version 2.5 2: PC Paintbrush version 2.8 5: PC Paintbrush version 3.0
             /// </summary>
             public byte Version { get { return m_Data[1]; } set { m_Data[1] = value; } }
+
             /// <summary>
-            /// 其值为1时表示采用RLE压缩编码的方法
+            /// When its value is 1, it means that the RLE compression encoding method is used
             /// </summary>
             public byte Encoding { get { return m_Data[2]; } set { m_Data[2] = value; } }
+
             /// <summary>
-            /// 每个相素的位数
+            /// The number of bits per pixel
             /// </summary>
             public byte Bits_Per_Pixel { get { return m_Data[3]; } set { m_Data[3] = value; } }
 
@@ -43,12 +44,14 @@ namespace MUGENCharsSet
             public ushort Ymin { get { return BitConverter.ToUInt16(m_Data, 6); } set { SetUshort(6, value); } }
             public ushort Xmax { get { return BitConverter.ToUInt16(m_Data, 8); } set { SetUshort(8, value); } }
             public ushort Ymax { get { return BitConverter.ToUInt16(m_Data, 10); } set { SetUshort(10, value); } }
+
             /// <summary>
-            /// 水平分辨率
+            /// Horizontal resolution
             /// </summary>
             public ushort Hres1 { get { return BitConverter.ToUInt16(m_Data, 12); } set { SetUshort(12, value); } }
+
             /// <summary>
-            /// 垂直分辨率
+            /// Vertical resolution
             /// </summary>
             public ushort Vres1 { get { return BitConverter.ToUInt16(m_Data, 14); } set { SetUshort(14, value); } }
 
@@ -62,29 +65,33 @@ namespace MUGENCharsSet
                 }
                 set
                 {
-                    if (value.Length != 48) throw new Exception("错误的byte[]长度不是48");
+                    if (value.Length != 48) throw new Exception("Wrong byte[] length is not 48");
                     Array.Copy(value, 0, m_Data, 16, 48);
                 }
-
             }
+
             /// <summary>
-            /// 位知
+            /// Reserved data
             /// </summary>
             public byte Reserved { get { return m_Data[64]; } set { m_Data[64] = value; } }
+
             /// <summary>
-            /// 未知
+            /// Colour_Planes Data
             /// </summary>
             public byte Colour_Planes { get { return m_Data[65]; } set { m_Data[65] = value; } }
+
             /// <summary>
-            /// 解码缓冲区
+            /// Decode buffer
             /// </summary>
             public ushort Bytes_Per_Line { get { return BitConverter.ToUInt16(m_Data, 66); } set { SetUshort(66, value); } }
+
             /// <summary>
-            /// 位知
+            /// Palette_Type Data
             /// </summary>
             public ushort Palette_Type { get { return BitConverter.ToUInt16(m_Data, 68); } set { SetUshort(68, value); } }
+
             /// <summary>
-            /// 填充
+            /// Filler Data
             /// </summary>
             public byte[] Filler
             {
@@ -118,10 +125,10 @@ namespace MUGENCharsSet
             public int Height { get { return Ymax - Ymin + 1; } }
 
             /// <summary>
-            /// 设置16位数据保存到数据表
+            /// Set 16-bit data to save to the data table
             /// </summary>
-            /// <param name="p_Index">索引</param>
-            /// <param name="p_Data">数据</param>
+            /// <param name="p_Index">Index</param>
+            /// <param name="p_Data">Data</param>
             private void SetUshort(int p_Index, ushort p_Data)
             {
                 byte[] _ValueBytes = BitConverter.GetBytes(p_Data);
@@ -135,14 +142,14 @@ namespace MUGENCharsSet
         private Bitmap m_Image;
 
         /// <summary>
-        /// 获取图形
+        /// Get graphics
         /// </summary>
         public Bitmap PcxImage { get { return m_Image; } set { m_Image = value; } }
 
         /// <summary>
-        /// 根据指定图像文件路径创建<see cref="ImagePcx"/>类新实例
+        /// Create a new instance of the <see cref="ImagePcx"/> class according to the specified image file path
         /// </summary>
-        /// <param name="p_FileFullName">图像文件绝对路径</param>
+        /// <param name="p_FileFullName">absolute path of image file</param>
         public ImagePcx(string p_FileFullName)
         {
             if (!File.Exists(p_FileFullName)) return;
@@ -150,26 +157,25 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 根据指定字节数组创建<see cref="ImagePcx"/>类新实例
+        /// Create a new instance of the <see cref="ImagePcx"/> class based on the specified byte array
         /// </summary>
-        /// <param name="p_Data">字节数组</param>
+        /// <param name="p_Data">byte array</param>
         public ImagePcx(byte[] p_Data)
         {
             Load(p_Data);
         }
 
         /// <summary>
-        /// 创建<see cref="ImagePcx"/>类新实例
+        /// Create a new instance of the <see cref="ImagePcx"/> class
         /// </summary>
         public ImagePcx()
         {
-
         }
 
         /// <summary>
-        /// 开始获取数据
+        /// Start getting data
         /// </summary>
-        /// <param name="p_Bytes">PCX文件信息</param>
+        /// <param name="p_Bytes">PCX file information</param>
         private void Load(byte[] p_Bytes)
         {
             byte[] _Bytes = p_Bytes;
@@ -188,10 +194,11 @@ namespace MUGENCharsSet
                 byte[] _RowColorValue = new byte[0];
                 switch (m_Head.Colour_Planes)
                 {
-                    case 3: //24位
+                    case 3: //24 colors
                         _RowColorValue = LoadPCXLine24(_Bytes);
                         break;
-                    case 1: //256色
+
+                    case 1: //256 colors
                         _RowColorValue = LoadPCXLine8(_Bytes);
                         break;
                 }
@@ -217,9 +224,9 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 保存成PCX文件
+        /// Save as PCX file
         /// </summary>
-        /// <param name="p_FileFullName">完成路径</param>
+        /// <param name="p_FileFullName">Complete the path</param>
         public void Save(string p_FileFullName)
         {
             if (m_Image == null) return;
@@ -233,7 +240,8 @@ namespace MUGENCharsSet
 
             switch (m_Image.PixelFormat)
             {
-                #region 8位
+                #region 8 bits
+
                 case PixelFormat.Format8bppIndexed:
                     m_Head.Colour_Planes = 1;
                     BitmapData _ImageData = m_Image.LockBits(new Rectangle(0, 0, m_Head.Width, m_Head.Height), ImageLockMode.ReadOnly, m_Image.PixelFormat);
@@ -253,8 +261,11 @@ namespace MUGENCharsSet
                         _SaveData.WriteByte((byte)m_Image.Palette.Entries[i].B);
                     }
                     break;
-                #endregion
-                #region 其他都按24位保存
+
+                #endregion 8 bits
+
+                #region 24 bits
+
                 default:
                     m_Head.Colour_Planes = 3;
                     Bitmap _Bitamp24 = new Bitmap(m_Head.Width, m_Head.Height, PixelFormat.Format24bppRgb);
@@ -275,7 +286,8 @@ namespace MUGENCharsSet
                     _SaveData.Write(new byte[768], 0, 768);
 
                     break;
-                #endregion
+
+                    #endregion 24 bits
             }
             FileStream _FileStream = new FileStream(p_FileFullName, FileMode.Create, FileAccess.Write);
             _FileStream.Write(m_Head.m_Data, 0, 128);
@@ -284,16 +296,18 @@ namespace MUGENCharsSet
             _FileStream.Close();
         }
 
-        #region 取数据行
+        #region Fetching data rows
+
         /// <summary>
-        /// 读取标记
+        /// Read the mark
         /// </summary>
         private int m_ReadIndex = 0;
+
         /// <summary>
-        /// 获取PCX一行信息 24位色
+        /// Get PCX line information, 24-bit color
         /// </summary>
-        /// <param name="p_Data">数据</param>
-        /// <returns>BMP的行信息</returns>
+        /// <param name="p_Data">Data</param>
+        /// <returns>BMP line information</returns>
         private byte[] LoadPCXLine24(byte[] p_Data)
         {
             int _LineWidth = m_Head.Bytes_Per_Line;
@@ -303,7 +317,7 @@ namespace MUGENCharsSet
             int _ReadIndex = 0;
             while (true)
             {
-                if (m_ReadIndex > _EndBytesLength) break; //判断行扫描结束返回码
+                if (m_ReadIndex > _EndBytesLength) break; //Judge the end of line scan return code
                 byte _Data = p_Data[m_ReadIndex];
 
                 if (_Data > 0xC0)
@@ -312,7 +326,7 @@ namespace MUGENCharsSet
                     m_ReadIndex++;
                     for (int i = 0; i != _Count; i++)
                     {
-                        if (i + _ReadIndex >= _LineWidth)          //2009-6-12 RLE数据 会换行
+                        if (i + _ReadIndex >= _LineWidth)          //2009-6-12 RLE data will wrap
                         {
                             _WriteIndex--;
                             _ReadIndex = 0;
@@ -342,20 +356,21 @@ namespace MUGENCharsSet
             }
             return _ReturnBytes;
         }
+
         /// <summary>
-        /// 获取PCX一行信息 8位色
+        /// Get PCX line information 8-bit color
         /// </summary>
-        /// <param name="p_Data">数据</param>
-        /// <returns>BMP的行信息</returns>
+        /// <param name="p_Data">Data</param>
+        /// <returns>BMP line information</returns>
         private byte[] LoadPCXLine8(byte[] p_Data)
         {
             int _LineWidth = m_Head.Bytes_Per_Line;
             byte[] _ReturnBytes = new byte[_LineWidth];
-            int _EndBytesLength = p_Data.Length - 1 - (256 * 3);         //数据行不够就不执行了。。
+            int _EndBytesLength = p_Data.Length - 1 - (256 * 3);         //If there are not enough data rows, it will not be executed.。。
             int _ReadIndex = 0;
             while (true)
             {
-                if (m_ReadIndex > _EndBytesLength) break; //判断行扫描结束返回码
+                if (m_ReadIndex > _EndBytesLength) break; //Judge the end of line scan return code
 
                 byte _Data = p_Data[m_ReadIndex];
                 if (_Data > 0xC0)
@@ -379,15 +394,18 @@ namespace MUGENCharsSet
             }
             return _ReturnBytes;
         }
-        #endregion
 
-        #region 存数据行
+        #endregion Fetching data rows
+
+        #region Store data line
+
         private int m_SaveIndex = 0;
+
         /// <summary>
-        /// 返回PCX8位色数据
+        /// Return PCX 8-bit color data
         /// </summary>
-        /// <param name="p_Data">原始数据</param>
-        /// <returns>数据</returns>
+        /// <param name="p_Data">raw data</param>
+        /// <returns>Data</returns>
         private byte[] SavePCXLine8(byte[] p_Data)
         {
             MemoryStream _Memory = new MemoryStream();
@@ -432,11 +450,12 @@ namespace MUGENCharsSet
             }
             return _Memory.ToArray();
         }
+
         /// <summary>
-        /// 返回24位色数据
+        /// Return 24-bit color data
         /// </summary>
-        /// <param name="p_Data">原始数据</param>
-        /// <returns>数据</returns>
+        /// <param name="p_Data">raw data</param>
+        /// <returns>Data</returns>
         private byte[] SavePCXLine24(byte[] p_Data)
         {
             MemoryStream _Read = new MemoryStream();
@@ -465,7 +484,7 @@ namespace MUGENCharsSet
             m_SaveIndex = _OleIndex;
             return _All.ToArray();
         }
-        #endregion
 
+        #endregion Store data line
     }
 }

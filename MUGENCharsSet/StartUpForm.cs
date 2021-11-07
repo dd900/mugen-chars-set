@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace MUGENCharsSet
 {
     /// <summary>
-    /// 起始窗口类
+    /// Start window
     /// </summary>
     public partial class StartUpForm : Form
     {
@@ -21,15 +15,14 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当窗口加载时发生
+        /// When the window is loaded
         /// </summary>
         private void StartUpForm_Load(object sender, EventArgs e)
         {
-
         }
 
         /// <summary>
-        /// 当单击确定按钮时发生
+        /// When you click the OK button
         /// </summary>
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -40,18 +33,18 @@ namespace MUGENCharsSet
                 string mugenCfgPath = AppConfig.MugenExePath.GetDirPathOfFile() + MugenSetting.DataDir + MugenSetting.MugenCfgFileName;
                 if (!File.Exists(mugenCfgPath))
                 {
-                    throw new ApplicationException("mugen.cfg文件不存在！");
+                    throw new ApplicationException("Mugen.cfg file does not exist！");
                 }
             }
             catch (ApplicationException ex)
             {
-                MessageBox.Show(ex.Message, "操作失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
 
         /// <summary>
-        /// 当单击打开MUGEN程序路径按钮时发生
+        /// When you click Open Mugen Program Path button
         /// </summary>
         private void btnOpenMugenExePath_Click(object sender, EventArgs e)
         {
@@ -62,7 +55,7 @@ namespace MUGENCharsSet
         }
 
         /// <summary>
-        /// 当文件拖拽到MUGEN程序路径文本框时发生
+        /// When the file drags and drops to the Mugen program path text box
         /// </summary>
         private void txtMugenExePath_DragDrop(object sender, DragEventArgs e)
         {
